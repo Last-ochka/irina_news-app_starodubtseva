@@ -9,7 +9,9 @@ const Card = (props) => {
       <h5>{article.title}</h5>
       <div className="buttons">
         <button
-          // onClick={}
+          onClick={() => {
+            props.editArticle(article.id);
+          }}
           className="buttons_edit-button"
         >
           edit

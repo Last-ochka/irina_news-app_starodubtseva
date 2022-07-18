@@ -32,6 +32,7 @@ const NewsPage = () => {
     store.showModal = !store.showModal;
   });
   const editArticle = action((id) => {
+    
     console.log(id);
   });
 
