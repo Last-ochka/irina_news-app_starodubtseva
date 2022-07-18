@@ -1,20 +1,21 @@
 import React from "react";
+import store from "../store/articlesStore";
 import "./ModalWindow.css";
 
 const ModalWindow = (props) => {
   return (
     <div className="modal-window">
       <div className="openArticle">
-        <h5>{props.repo.title}</h5>
-        <p>{props.repo.text}</p>
+        <h5>{store.shownArticle.title}</h5>
+        <p>{store.shownArticle.text}</p>
         <button
           onClick={() => {
-            props.viewArticle(props.repo.id);
+            props.viewArticle(store.shownArticle.id);
           }}
         >
           close
         </button>
-        <small>{new Date(props.repo.createdAt).toLocaleDateString()}</small>
+        <small>{new Date(store.shownArticle.createdAt).toLocaleDateString()}</small>
       </div>
     </div>
   );

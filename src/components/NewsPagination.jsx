@@ -18,6 +18,7 @@ const NewsPagination = (props) => {
 
   return (
     <ul>
+      <h2>{store.articlesLength}</h2>
       {pages.map((page) => {
         return (
           <button
