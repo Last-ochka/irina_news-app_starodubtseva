@@ -6,12 +6,15 @@ import store from "./../store/articlesStore.js";
 import ModalForm from "../components/ModalForm";
 import Card from "../components/Card";
 import ModalWindow from "../components/ModalWindow";
+import NewsPagination from "../components/NewsPagination";
 
 const NewsPage = () => {
   const apiUrl = `https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`;
+  const urlForLength = `https://62061fb7161670001741bf36.mockapi.io/api/news`;
   useEffect(() => {
     store.startLoading();
     store.getArticles(apiUrl);
+    store.getArticlesLength(urlForLength)
   }, [apiUrl]);
 
   const deleteArticle = (id) => {
@@ -96,6 +99,7 @@ const NewsPage = () => {
         new
       </button>
       {store.newArticle ? <ModalForm /> : <></>}
+      <NewsPagination />
     </div>
   );
 };
