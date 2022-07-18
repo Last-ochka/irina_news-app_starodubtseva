@@ -10,7 +10,7 @@ const Card = (props) => {
       <div className="buttons">
         <button
           onClick={() => {
-            props.editArticle(article.id);
+            props.editArticle(article);
           }}
           className="buttons_edit-button"
         >

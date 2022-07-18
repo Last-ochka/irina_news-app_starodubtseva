@@ -6,8 +6,9 @@ import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 
 const NewsPagination = (props) => {
+  // const urlForAll = `https://62061fb7161670001741bf36.mockapi.io/api/news`;
   useEffect(() => {
-    //  store.getArticlesLength(urlApi)
+    //  store.getAllArticles(urlForAll)
   }, [,]);
 
   let pages = [];
@@ -19,6 +20,8 @@ const NewsPagination = (props) => {
   return (
     <ul>
       <h2>{store.articlesLength}</h2>
+
+      <h1>{store.articles.map((page) => {<p>{page}</p>})}</h1>
       {pages.map((page) => {
         return (
           <button
@@ -36,5 +39,3 @@ const NewsPagination = (props) => {
 };
 
 export default observer(NewsPagination);
-
-
