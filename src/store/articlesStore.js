@@ -15,7 +15,6 @@ class Store {
     editableArticle = {};
     editModal = false;
     allArticles = [];
-    // lastArticleId = -1;
 
     constructor() {
         makeObservable(this, {
@@ -89,7 +88,12 @@ class Store {
     }
     get lastArticleId() {
         return (
-            (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
+            (this.allArticles?.[this.articlesLength - 1]?.id) ?
+
+                this.allArticles[this.articlesLength - 1].id : -1
+        )
+        // (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
+        // чтоб не забыть эквивалент 
     }
     setPage(curretPage) {
         runInAction(() => {
@@ -97,7 +101,6 @@ class Store {
                 (store.page = curretPage) :
                 (store.page = ((curretPage - 1) < 1) ? 1 : (curretPage - 1))
         })
-        // runInAction(() => { store.page = curretPage; })
     }
 
     startLoading = () => { store.loading = true };
@@ -132,22 +135,28 @@ class Store {
     };
 
     onNewSubmit = () => {
-        axios({
-            method: "post",
-            url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
-            data: {
-                createdAt: Date.now(),
-                title: store.newArticleTitle,
-                text: store.newArticleText,
-                id: store.lastArticleId + 1,
-            },
-        })
-            .then(() => runInAction(() => {
-                store.getAllArticles();
-                store.closeModalForm();
-                store.newArticleTitle = '';
-                store.newArticleText = '';
-            }));
+        if (!store.newArticleTitle) {
+            alert("Title cannot be empty!")
+        } else if (!store.newArticleText) {
+            alert("Text cannot be empty!")
+        }
+        else
+            axios({
+                method: "post",
+                url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
+                data: {
+                    createdAt: Date.now(),
+                    title: store.newArticleTitle,
+                    text: store.newArticleText,
+                    id: store.lastArticleId + 1,
+                },
+            })
+                .then(() => runInAction(() => {
+                    store.getAllArticles();
+                    store.closeModalForm();
+                    store.newArticleTitle = '';
+                    store.newArticleText = '';
+                }));
     }
     createArticle() {
         store.newArticle = true;
@@ -160,43 +169,48 @@ class Store {
     };
 
     onEditSubmit = (idArticle) => {
-
-        // axios({
-        //     method: "PATCH",
-        //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
-        //     data: {
-        //         createdAt: Date.now(),
-        //         title: store.newArticleTitle,
-        //         text: store.newArticleText,
-        //     },
-        // })
-        //     .then(() => {
-        //         runInAction(() => {
-        //             store.getAllArticles();
-        //             store.closeModalForm();
-        //             store.newArticleTitle = '';
-        //             store.newArticleText = '';
-        //         })
-        //     })
-        axios({
-            method: "put",
-            url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + idArticle),
-            data: {
-                createdAt: Date.now(),
-                title: store.newArticleTitle,
-                text: store.newArticleText,
-                id: idArticle,
-            },
-        })
-            .then(() => {
-                runInAction(() => {
-                    store.getAllArticles();
-                    store.getArticles();
-                    store.closeModalForm();
-                    store.newArticleTitle = '';
-                    store.newArticleText = '';
-                })
+        if (!store.newArticleTitle) {
+            alert("Title cannot be empty!")
+        } else if (!store.newArticleText) {
+            alert("Text cannot be empty!")
+        }
+        else
+            // axios({
+            //     method: "PATCH",
+            //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
+            //     data: {
+            //         createdAt: Date.now(),
+            //         title: store.newArticleTitle,
+            //         text: store.newArticleText,
+            //     },
+            // })
+            //     .then(() => {
+            //         runInAction(() => {
+            //             store.getAllArticles();
+            //             store.closeModalForm();
+            //             store.newArticleTitle = '';
+            //             store.newArticleText = '';
+            //         })
+            //     })
+            axios({
+                method: "put",
+                url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + idArticle),
+                data: {
+                    createdAt: Date.now(),
+                    title: store.newArticleTitle,
+                    text: store.newArticleText,
+                    id: idArticle,
+                },
             })
+                .then(() => {
+                    runInAction(() => {
+                        store.getAllArticles();
+                        store.getArticles();
+                        store.closeModalForm();
+                        store.newArticleTitle = '';
+                        store.newArticleText = '';
+                    })
+                })
     }
 }
 const store = new Store();

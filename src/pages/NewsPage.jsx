@@ -11,14 +11,17 @@ const NewsPage = () => {
   useEffect(() => {
     store.getArticles();
     store.getAllArticles();
-  }, [ store.articlesLength, store.pages, store.page]);
+  }, [store.articlesLength, store.pages, store.page]);
 
   const text = store.lastArticleId;
   return (
-    <div>
-      {store.loading ? <h2>Wait...</h2> : <></>}
+    <div className="news-page">
+      {store.loading ? <h2>Wait...</h2> : <h2>Amount of news: {store.articlesLength}</h2>}
+      <button onClick={store.createArticle} className="createArticle">
+        New Article
+      </button>
       {store.articles.length < 1 ? (
-        <p>No articles, sorry</p>
+        <p className="no-articles">No articles, sorry</p>
       ) : (
         <ul className="newsArticle">
           {store.articles.map((article) => {
@@ -30,22 +33,18 @@ const NewsPage = () => {
       {store.showModal ? <ModalWindow /> : <></>}
       {store.editModal ? (
         <ModalForm
-        onClickModal={() => store.onEditSubmit(store.editableArticle.id)}
-         />
+          onClickModal={() => store.onEditSubmit(store.editableArticle.id)}
+        />
       ) : (
         <></>
       )}
-      <button onClick={store.createArticle} className="createArticle">
-        new
-      </button>
+     
       {store.newArticle ? (
         <ModalForm onClickModal={() => store.onNewSubmit()} />
       ) : (
         <></>
       )}
       <NewsPagination />
-      <h2>last id: {text}</h2>
-      <h1>page {store.page}</h1>
     </div>
   );
 };

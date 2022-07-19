@@ -1,0 +1,11 @@
+.pagination-buttons {
+    /* margin-left: 50%; */
+    padding: 0;
+    display: inline-block;
+}
+.pagination {
+    text-align: center;
+}
+.pagination-buttons button {
+    margin: 0 5px;
+}

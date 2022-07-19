@@ -3,7 +3,7 @@ import store from "../store/articlesStore";
 import "./Pagination.css";
 import { observer } from "mobx-react-lite";
 
-const NewsPagination = (props) => {
+const NewsPagination = () => {
   let pages = [];
   for (let i = 1; i < store.pages + 1; i++) {
     pages[i] = i;
@@ -13,14 +13,8 @@ const NewsPagination = (props) => {
   }, [store.articlesLength]);
 
   return (
-    <ul>
-      <h2>amount of news: {store.articlesLength}</h2>
-
-      <h1>
-        {store.articles.map((page) => {
-          <p>{page}</p>;
-        })}
-      </h1>
+    <div className="pagination">
+    <ul className="pagination-buttons">
       {pages.map((page) => {
         return (
           <button
@@ -33,7 +27,9 @@ const NewsPagination = (props) => {
           </button>
         );
       })}
-    </ul>
+    </ul>  
+    <h4>Page: {store.page}</h4>
+    </div>
   );
 };
 

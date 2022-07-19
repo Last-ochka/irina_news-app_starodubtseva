@@ -2,6 +2,7 @@ import React from "react";
 import store from "../store/articlesStore";
 import "./ModalWindow.css";
 import "./ModalForm.css";
+import { PropTypes } from "prop-types";
 
 const ModalForm = (props) => {
   return (
@@ -40,6 +41,10 @@ const ModalForm = (props) => {
       </div>
     </div>
   );
+};
+
+ModalForm.propTypes = {
+  onClickModal: PropTypes.func,
 };
 
 export default ModalForm;
