@@ -10,7 +10,7 @@ const ModalWindow = (props) => {
         <p>{store.shownArticle.text}</p>
         <button
           onClick={() => {
-            props.viewArticle(store.shownArticle.id);
+            store.viewArticle(store.shownArticle.id);
           }}
         >
           close

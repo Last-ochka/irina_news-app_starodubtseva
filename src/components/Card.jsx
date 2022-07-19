@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import "./Card.css";
+import store from "../store/articlesStore";
 
 const Card = (props) => {
   const { article, data } = props;
@@ -10,7 +11,7 @@ const Card = (props) => {
       <div className="buttons">
         <button
           onClick={() => {
-            props.editArticle(article);
+            store.editArticle(article);
           }}
           className="buttons_edit-button"
         >
@@ -18,7 +19,7 @@ const Card = (props) => {
         </button>
         <button
           onClick={() => {
-            props.deleteArticle(article.id);
+            store.deleteArticle(article.id);
           }}
           className="buttons_delete-button"
         >
@@ -28,7 +29,7 @@ const Card = (props) => {
       <p className="article_text">{article.text.slice(0, 100)} </p>
       <button
         onClick={() => {
-          props.showArticle(article);
+          store.showArticle(article);
         }}
         className="view-more"
       >

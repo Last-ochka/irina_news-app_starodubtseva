@@ -1,0 +1,25 @@
+.title {
+  width: 458px;
+  font-size: 20px;
+  height: 30px;
+}
+.text {
+  width: 850px;
+  font-size: 18px;
+  height: 300px;
+  word-wrap: normal;
+  /* text-align: center; */
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  column-gap: 324px;
+  flex-wrap: wrap;
+  row-gap: 20px;
+}
+.form-button{
+  width: 65px;
+  height: 40px;
+}

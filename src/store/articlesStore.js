@@ -30,21 +30,29 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             allArticles: observable,
+            articlesLength: observable,
             pages: computed,
             lastArticleId: computed,
-            articlesLength: observable,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
             deleteArticle: action,
-
+            onChangeText: action,
+            onChangeTitle: action,
+            onNewSubmit: action,
+            viewArticle: action,
+            showArticle: action,
+            createArticle: action,
+            closeModalForm: action,
+            editArticleModalForm: action,
+            editArticle: action,
         })
     }
 
-    getArticles = (url) => {
+    getArticles = () => {
         store.loading = true;
         axios
-            .get(url)
+            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
             .then(function (response) {
                 runInAction(() => {
                     store.articles = response.data.items;
@@ -55,9 +63,9 @@ class Store {
                 console.log(error);
             })
     }
-    getAllArticles = (url) =>
+    getAllArticles = () =>
         axios
-            .get(url)
+            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
             .then(function (response) {
                 runInAction(() => {
                     store.articlesLength = response.data.items.length;
@@ -67,53 +75,129 @@ class Store {
             .catch(function (error) {
                 console.log(error);
             })
-    deleteArticle = (id, apiUrl) =>
+    deleteArticle = (id) => {
         axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/' + id)
             .then(() => {
-                return axios.get(apiUrl)
-            })
-            .then(response => {
                 runInAction(() => {
-                    store.articles = response.data.items;
-                    store.loading = false;
+                    store.getAllArticles();
                 })
             })
-
-
-
-    // editArticle = (id, apiUrl) =>
-    //  axios({
-    //     method: "patch",
-    //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news"+id),
-    //     data: {
-    //       createdAt: Date.now(),
-    //       title: store.newArticleTitle,
-    //       text: newArticleTitleText,
-    //       id: 90,
-    //     },
-    //   })
-    //     .then(() => {
-    //       return axios.get(apiUrl);
-    //     })
-    //     .then((res) => {
-    //       setAppState({ loading: false, repos: res.data });
-    //     });
-    // };
-    //     })
+    }
 
     get pages() {
-        return this.articlesLength / 6;
+        return Math.ceil(this.articlesLength / 6);
     }
     get lastArticleId() {
         return (
             (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
     }
     setPage(curretPage) {
-        runInAction(() => { store.page = curretPage; })
+        runInAction(() => {
+            (curretPage < store.pages + 1) ?
+                (store.page = curretPage) :
+                (store.page = ((curretPage - 1) < 1) ? 1 : (curretPage - 1))
+        })
+        // runInAction(() => { store.page = curretPage; })
     }
 
     startLoading = () => { store.loading = true };
 
+    onChangeTitle = (e) => {
+        store.newArticleTitle = e;
+    }
+    onChangeText = (e) => {
+        store.newArticleText = e;
+    }
+
+    viewArticle = (id) => {
+        console.log(id);
+        store.showModal = !store.showModal;
+    };
+
+    showArticle = (article) => {
+        store.shownArticle = article;
+        store.viewArticle(article.id);
+    };
+
+    editArticle = (article) => {
+        store.editableArticle = article;
+        store.newArticleTitle = article.title;
+        store.newArticleText = article.text;
+        store.editArticleModalForm(article.id);
+    };
+
+    editArticleModalForm = (id) => {
+        console.log(id);
+        store.editModal = !store.editModal;
+    };
+
+    onNewSubmit = () => {
+        axios({
+            method: "post",
+            url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
+            data: {
+                createdAt: Date.now(),
+                title: store.newArticleTitle,
+                text: store.newArticleText,
+                id: store.lastArticleId + 1,
+            },
+        })
+            .then(() => runInAction(() => {
+                store.getAllArticles();
+                store.closeModalForm();
+                store.newArticleTitle = '';
+                store.newArticleText = '';
+            }));
+    }
+    createArticle() {
+        store.newArticle = true;
+    };
+    closeModalForm() {
+        store.newArticle = false;
+        store.editModal = false;
+        store.newArticleTitle = '';
+        store.newArticleText = '';
+    };
+
+    onEditSubmit = (idArticle) => {
+
+        // axios({
+        //     method: "PATCH",
+        //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
+        //     data: {
+        //         createdAt: Date.now(),
+        //         title: store.newArticleTitle,
+        //         text: store.newArticleText,
+        //     },
+        // })
+        //     .then(() => {
+        //         runInAction(() => {
+        //             store.getAllArticles();
+        //             store.closeModalForm();
+        //             store.newArticleTitle = '';
+        //             store.newArticleText = '';
+        //         })
+        //     })
+        axios({
+            method: "put",
+            url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + idArticle),
+            data: {
+                createdAt: Date.now(),
+                title: store.newArticleTitle,
+                text: store.newArticleText,
+                id: idArticle,
+            },
+        })
+            .then(() => {
+                runInAction(() => {
+                    store.getAllArticles();
+                    store.getArticles();
+                    store.closeModalForm();
+                    store.newArticleTitle = '';
+                    store.newArticleText = '';
+                })
+            })
+    }
 }
 const store = new Store();
 

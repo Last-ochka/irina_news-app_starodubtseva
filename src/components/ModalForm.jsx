@@ -1,35 +1,41 @@
 import React from "react";
 import store from "../store/articlesStore";
 import "./ModalWindow.css";
-import { action } from "mobx";
+import "./ModalForm.css";
 
 const ModalForm = (props) => {
-  const onChangeTitle = action((e) => {
-    const val = e.target.value;
-    store.newArticleTitle = val;
-  });
-  const onChangeText = action((e) => {
-    const val = e.target.value;
-    store.newArticleText = val;
-  });
   return (
     <div className="modal-window">
       <div className="openArticle">
         <form>
           <input
+            className="title"
             type="text"
             name="name"
             placeholder="Title"
-            onChange={onChangeTitle}
+            defaultValue={store.newArticleTitle}
+            onChange={(e) => store.onChangeTitle(e.target.value)}
           />
+          <button
+            className="form-button"
+            type="button"
+            onClick={store.closeModalForm}
+          >
+            Close
+          </button>
           <textarea
-            rows="10"
-            cols="45"
-            name="text"
-            onChange={onChangeText}
+            className="text"
+            type="text"
+            onChange={(e) => store.onChangeText(e.target.value)}
             placeholder="Text"
+            defaultValue={store.newArticleText}
           ></textarea>
-          <input type="submit" value="Save" />
+          <input
+            className="form-button"
+            type="button"
+            onClick={props.onClickModal}
+            value="Save"
+          />
         </form>
       </div>
     </div>
