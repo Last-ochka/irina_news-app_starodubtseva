@@ -10,7 +10,7 @@ const NewsPagination = () => {
   }
   useEffect(() => {
     store.setPage(store.page);
-  }, [store.articlesLength]);
+  }, [store.articles.length]);
 
   return (
     <div className="pagination">

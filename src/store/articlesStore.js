@@ -97,9 +97,9 @@ class Store {
     }
     setPage(curretPage) {
         runInAction(() => {
-            (curretPage < store.pages + 1) ?
+            (store.articles.length > 0) ?
                 (store.page = curretPage) :
-                (store.page = ((curretPage - 1) < 1) ? 1 : (curretPage - 1))
+                (store.page =  1)
         })
     }
 
