@@ -7,10 +7,11 @@
   bottom: 0px;
 }
 .openArticle {
-  margin: auto;
+  margin:  auto;
   background-color: rgb(255, 255, 255);
-  width: 1150px;
-  height: 500px;
-  margin-top: 50px;
+  width: 900px;
+  height: 450px;
+  margin-top: 150px;
   padding: 20px;
 }
+

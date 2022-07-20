@@ -36,3 +36,6 @@ h2 {
 small {
   margin: auto;
 }
+.buttons_edit-button {
+  margin-right: 5px;
+}

@@ -1,24 +1,20 @@
 import React, { useEffect } from "react";
 import store from "../store/articlesStore";
 import "./Pagination.css";
-import axios from "axios";
-import { action } from "mobx";
 import { observer } from "mobx-react-lite";
 
-const NewsPagination = (props) => {
-  useEffect(() => {
-    //  store.getArticlesLength(urlApi)
-  }, [,]);
-
+const NewsPagination = () => {
   let pages = [];
-
-  for (let i = 1; i <= store.pages + 1; i++) {
+  for (let i = 1; i < store.pages + 1; i++) {
     pages[i] = i;
   }
+  useEffect(() => {
+    store.setPage(store.page);
+  }, [store.articles.length]);
 
   return (
-    <ul>
-      <h2>{store.articlesLength}</h2>
+    <div className="pagination">
+    <ul className="pagination-buttons">
       {pages.map((page) => {
         return (
           <button
@@ -31,10 +27,10 @@ const NewsPagination = (props) => {
           </button>
         );
       })}
-    </ul>
+    </ul>  
+    <h4>Page: {store.page}</h4>
+    </div>
   );
 };
 
 export default observer(NewsPagination);
-
-

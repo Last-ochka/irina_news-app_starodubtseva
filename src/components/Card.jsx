@@ -1,6 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React from "react";
 import "./Card.css";
+import store from "../store/articlesStore";
+import { PropTypes } from "prop-types";
 
 const Card = (props) => {
   const { article, data } = props;
@@ -10,32 +12,43 @@ const Card = (props) => {
       <div className="buttons">
         <button
           onClick={() => {
-            props.editArticle(article.id);
+            store.editArticle(article);
           }}
           className="buttons_edit-button"
         >
-          edit
+          Edit
         </button>
         <button
           onClick={() => {
-            props.deleteArticle(article.id);
+            store.deleteArticle(article.id);
           }}
           className="buttons_delete-button"
         >
-          del
+          Delete
         </button>
       </div>
       <p className="article_text">{article.text.slice(0, 100)} </p>
       <button
         onClick={() => {
-          props.showArticle(article);
+          store.showArticle(article);
         }}
         className="view-more"
       >
-        view-more
+        View-more
       </button>
       <small>{data}</small>
     </li>
   );
 };
+
+Card.propTypes = {
+  article: PropTypes.shape({
+    createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    title: PropTypes.string,
+    text: PropTypes.string,
+    id: PropTypes.string,
+  }),
+  data: PropTypes.string,
+};
+
 export default observer(Card);

@@ -2,7 +2,7 @@ import React from "react";
 import store from "../store/articlesStore";
 import "./ModalWindow.css";
 
-const ModalWindow = (props) => {
+const ModalWindow = () => {
   return (
     <div className="modal-window">
       <div className="openArticle">
@@ -10,12 +10,14 @@ const ModalWindow = (props) => {
         <p>{store.shownArticle.text}</p>
         <button
           onClick={() => {
-            props.viewArticle(store.shownArticle.id);
+            store.viewArticle(store.shownArticle.id);
           }}
         >
           close
         </button>
-        <small>{new Date(store.shownArticle.createdAt).toLocaleDateString()}</small>
+        <small>
+          {new Date(store.shownArticle.createdAt).toLocaleDateString()}
+        </small>
       </div>
     </div>
   );

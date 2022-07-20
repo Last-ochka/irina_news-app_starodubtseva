@@ -1,5 +1,16 @@
 h1 {
   text-align: center;
-  margin-top: 55px;
+  margin-top: 25px;
   margin-bottom: 45px;
+}
+.createArticle{
+  width: 100px;
+  height: 40px;
+  margin-left: 170px;
+}
+.news-page {
+  text-align: center;
+}
+.createArticle {
+  margin-right: 1500px;
 }
