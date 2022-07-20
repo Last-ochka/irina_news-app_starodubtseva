@@ -10,7 +10,7 @@ class Store {
     newArticle = false;
     newArticleTitle = "";
     newArticleText = "";
-    page = 8;
+    page = 1;
     articlesLength = 0;
 
     constructor(articlesLength) {
@@ -28,6 +28,7 @@ class Store {
             getArticles: action,
             startLoading: action,
             getArticlesLength: action,
+            deleteArticle: action,
 
         })
         this.articlesLength = articlesLength;
@@ -56,6 +57,18 @@ class Store {
         .catch(function (error) {
             console.log(error);
         })
+    deleteArticle = (id,apiUrl) =>
+        axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/' + id)
+            .then(() => {
+
+                return axios.get(apiUrl)
+            })
+            .then(response => {
+                runInAction(() => {
+                store.articles = response.data.items;
+                store.loading = false;
+                })
+            })
 
     get pages() {
         return this.articlesLength / 6;

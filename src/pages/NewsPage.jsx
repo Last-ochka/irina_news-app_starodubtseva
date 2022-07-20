@@ -14,20 +14,12 @@ const NewsPage = () => {
   useEffect(() => {
     store.startLoading();
     store.getArticles(apiUrl);
-    store.getArticlesLength(urlForLength)
+    store.getArticlesLength(urlForLength);
   }, [apiUrl]);
 
   const deleteArticle = (id) => {
     console.log(id);
-
-    // axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/'+id)
-    //   .then(() => {
-
-    //       return axios.get(apiUrl)
-    //   })
-    //   .then(res => {
-    //     setAppState({ loading: false, repos: res.data })
-    //   })
+    store.deleteArticle(id, apiUrl);
   };
 
   const showArticle = action((article) => {
@@ -40,6 +32,7 @@ const NewsPage = () => {
     store.showModal = !store.showModal;
   });
   const editArticle = action((id) => {
+    
     console.log(id);
   });
 
@@ -90,7 +83,7 @@ const NewsPage = () => {
         </ul>
       )}
       {store.showModal ? (
-        <ModalWindow viewArticle={viewArticle} repo={store.shownArticle} />
+        <ModalWindow viewArticle={viewArticle} />
       ) : (
         <></>
       )}
