@@ -20,7 +20,7 @@ const NewsPage = () => {
       <button onClick={store.createArticle} className="createArticle">
         New Article
       </button>
-      {store.articles.length < 1 ? (
+      {((store.articles.length < 1)&&(store.loading === false)) ? (
         <p className="no-articles">No articles, sorry</p>
       ) : (
         <ul className="newsArticle">

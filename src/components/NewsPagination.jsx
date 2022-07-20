@@ -28,7 +28,10 @@ const NewsPagination = () => {
         );
       })}
     </ul>  
-    <h4>Page: {store.page}</h4>
+     {(store.articles.length < 1) ? (
+       ""
+      ) : (
+    <h4>Page: {store.page}</h4>)}
     </div>
   );
 };
