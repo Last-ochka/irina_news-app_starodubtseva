@@ -14,7 +14,7 @@ const ModalWindow = () => {
           }}
         >
           close
-        </button>{" "}
+        </button>
         <p>{store.shownArticle.text}</p>
         <small>
           {new Date(store.shownArticle.createdAt).toLocaleDateString()}
