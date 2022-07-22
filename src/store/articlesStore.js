@@ -11,7 +11,6 @@ class Store {
     newArticleTitle = "";
     newArticleText = "";
     page = 1;
-    articlesLength = 0;
     editableArticle = {};
     editModal = false;
     allArticles = [];
@@ -29,9 +28,9 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             allArticles: observable,
-            articlesLength: observable,
             pages: computed,
             lastArticleId: computed,
+            articlesLength: computed,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -67,7 +66,6 @@ class Store {
             .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
             .then(function (response) {
                 runInAction(() => {
-                    store.articlesLength = response.data.items.length;
                     store.allArticles = response.data.items;
                 })
             })
@@ -81,6 +79,12 @@ class Store {
                     store.getAllArticles();
                 })
             })
+    }
+    
+    get articlesLength(){
+        return (
+            store.allArticles.length 
+        )
     }
 
     get pages() {
