@@ -14,6 +14,7 @@ class Store {
     editableArticle = {};
     editModal = false;
     allArticles = [];
+    signIn = true;
 
     constructor() {
         makeObservable(this, {
@@ -28,9 +29,12 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             allArticles: observable,
+            signIn: observable,
             pages: computed,
             lastArticleId: computed,
             articlesLength: computed,
+            signText: computed,
+            signLink: computed,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -44,6 +48,8 @@ class Store {
             closeModalForm: action,
             editArticleModalForm: action,
             editArticle: action,
+            onSign: action,
+            onSignDefault: action,
         })
     }
 
@@ -80,10 +86,10 @@ class Store {
                 })
             })
     }
-    
-    get articlesLength(){
+
+    get articlesLength() {
         return (
-            store.allArticles.length 
+            store.allArticles.length
         )
     }
 
@@ -103,7 +109,7 @@ class Store {
         runInAction(() => {
             (store.articles.length > 0) ?
                 (store.page = curretPage) :
-                (store.page =  1)
+                (store.page = 1)
         })
     }
 
@@ -215,6 +221,21 @@ class Store {
                         store.newArticleText = '';
                     })
                 })
+    }
+    onSign = () => {
+        store.signIn = !store.signIn;
+    }
+
+    onSignDefault = () => {
+        store.signIn = true;
+    }
+
+    get signText() {
+        return (store.signIn === true ? 'Sign In' : 'Sign Up')
+    }
+
+    get signLink() {
+        return (store.signIn === true ? 'Or create an account' : 'Or login')
     }
 }
 const store = new Store();
