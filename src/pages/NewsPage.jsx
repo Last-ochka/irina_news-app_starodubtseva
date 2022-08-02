@@ -17,15 +17,19 @@ const NewsPage = () => {
   const text = store.lastArticleId;
   return (
     <div className="news-page">
-            <h1>Список новостей</h1> 
-      {store.loading ? <h2>Wait...</h2> : <h2>Amount of news: {store.articlesLength}</h2>}
+      <h1>Список новостей</h1>
+      {store.loading ? (
+        <h2>Wait...</h2>
+      ) : (
+        <h2>Amount of news: {store.articlesLength}</h2>
+      )}
       <button onClick={store.createArticle} className="createArticle">
         New Article
       </button>
-      <Link 
-      onClick={store.onSignDefault}
-      to="signin">Sign In</Link>
-      {((store.articles.length < 1)&&(store.loading === false)) ? (
+      <Link onClick={store.onSignDefault} to="signin">
+        Sign In
+      </Link>
+      {store.articles.length < 1 && store.loading === false ? (
         <p className="no-articles">No articles, sorry</p>
       ) : (
         <ul className="newsArticle">
@@ -37,13 +41,11 @@ const NewsPage = () => {
       )}
       {store.showModal ? <ModalWindow /> : <></>}
       {store.editModal ? (
-        <ModalForm
-          onClickModal={() => store.onEditSubmit(store.editableArticle.id)}
-        />
+        <ModalForm onClickModal={() => store.onEditSubmit()} />
       ) : (
         <></>
       )}
-     
+
       {store.newArticle ? (
         <ModalForm onClickModal={() => store.onNewSubmit()} />
       ) : (
@@ -54,5 +56,3 @@ const NewsPage = () => {
   );
 };
 export default observer(NewsPage);
-
-

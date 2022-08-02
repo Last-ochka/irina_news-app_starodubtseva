@@ -14,7 +14,6 @@ class Store {
     editableArticle = {};
     editModal = false;
     allArticles = [];
-    signIn = true;
 
     constructor() {
         makeObservable(this, {
@@ -29,12 +28,9 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             allArticles: observable,
-            signIn: observable,
             pages: computed,
             lastArticleId: computed,
             articlesLength: computed,
-            signText: computed,
-            signLink: computed,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -48,8 +44,6 @@ class Store {
             closeModalForm: action,
             editArticleModalForm: action,
             editArticle: action,
-            onSign: action,
-            onSignDefault: action,
         })
     }
 
@@ -57,9 +51,11 @@ class Store {
         store.loading = true;
         axios
             .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
+            // .get('http://localhost:3000/tasks')   // from ruby
             .then(function (response) {
                 runInAction(() => {
                     store.articles = response.data.items;
+                    // store.articles=response.data  //  from ruby
                     store.loading = false;
                 })
             })
@@ -123,7 +119,6 @@ class Store {
     }
 
     viewArticle = (id) => {
-        console.log(id);
         store.showModal = !store.showModal;
     };
 
@@ -140,7 +135,6 @@ class Store {
     };
 
     editArticleModalForm = (id) => {
-        console.log(id);
         store.editModal = !store.editModal;
     };
 
@@ -178,13 +172,12 @@ class Store {
         store.newArticleText = '';
     };
 
-    onEditSubmit = (idArticle) => {
+    onEditSubmit = () => {
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
             alert("Text cannot be empty!")
-        }
-        else
+        } else {
             // axios({
             //     method: "PATCH",
             //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
@@ -202,40 +195,30 @@ class Store {
             //             store.newArticleText = '';
             //         })
             //     })
+
+
+            // console.log("start")
+            // axios.delete('http://localhost:3000/tasks/13')
             axios({
                 method: "put",
-                url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + idArticle),
+                url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + store.editableArticle.id),
                 data: {
                     createdAt: Date.now(),
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                    id: idArticle,
+                    id: store.editableArticle.id,
                 },
             })
-                .then(() => {
-                    runInAction(() => {
-                        store.getAllArticles();
-                        store.getArticles();
-                        store.closeModalForm();
-                        store.newArticleTitle = '';
-                        store.newArticleText = '';
-                    })
+            .then(() => {
+                runInAction(() => {
+                    store.getAllArticles();
+                    store.getArticles();
+                    store.closeModalForm();
+                    store.newArticleTitle = '';
+                    store.newArticleText = '';
                 })
-    }
-    onSign = () => {
-        store.signIn = !store.signIn;
-    }
-
-    onSignDefault = () => {
-        store.signIn = true;
-    }
-
-    get signText() {
-        return (store.signIn === true ? 'Sign In' : 'Sign Up')
-    }
-
-    get signLink() {
-        return (store.signIn === true ? 'Or create an account' : 'Or login')
+            })
+        }
     }
 }
 const store = new Store();

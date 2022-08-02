@@ -5,7 +5,7 @@ import { useState } from "react";
 const Test = () => {
    const getFiles = () => {
         axios
-            .get('http://localhost:3000/pages?id=7')
+            .get('http://localhost:3000/tasks')
             .then(function (response) {  
                    console.log(response.data)
             })
