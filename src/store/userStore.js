@@ -5,19 +5,25 @@ class UserStore {
     signIn = true;
     userLogin = '';
     userPassword = '';
+    invalidPassword = false;
+    invalidLogin = false;
 
     constructor() {
         makeObservable(this, {
             signIn: observable,
             userLogin: observable,
             userPassword: observable,
+            invalidPassword: observable,
+            invalidLogin: observable,
             signText: computed,
             signLink: computed,
+            buttonDisabled: computed,
             onSign: action,
             onSignDefault: action,
             putUserLogin: action,
             putUserPassword: action,
             onCompletedForm: action,
+
         })
     }
 
@@ -25,6 +31,10 @@ class UserStore {
         userStore.signIn = !userStore.signIn;
         userStore.userLogin = '';
         userStore.userPassword = '';
+        if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
+        else userStore.invalidLogin = true;
+        if (userStore.userPassword.length < 5) userStore.invalidPassword = false;
+        else userStore.invalidPassword = true;
 
     }
 
@@ -42,9 +52,21 @@ class UserStore {
 
     putUserLogin(e) {
         userStore.userLogin = e.target.value;
+        if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
+        else userStore.invalidLogin = true;
+
     }
     putUserPassword(e) {
         userStore.userPassword = e.target.value;
+        if (userStore.userPassword.length < 5) userStore.invalidPassword = false;
+        else userStore.invalidPassword = true;
+    }
+
+    get buttonDisabled() {
+
+        if ((userStore.invalidLogin) && (userStore.invalidPassword)) {
+            return false
+        } else { return true }
     }
     onCompletedForm() {
         if (userStore.signIn) { }
@@ -57,11 +79,11 @@ class UserStore {
                     password: userStore.userPassword,
                 },
             });
-            userStore.userPassword='';
-            userStore.userLogin='';
+            userStore.userPassword = '';
+            userStore.userLogin = '';
 
         }
     }
 }
-    const userStore = new UserStore();
+const userStore = new UserStore();
 export default userStore;

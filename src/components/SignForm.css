@@ -1,9 +1,11 @@
 .sign-form {
+  position: relative;
     display: flex;
     flex-direction: column;
     width: 300px;
     margin: auto;
     text-align: center;
+    row-gap: 25px;
 }
 /* .sign-container {
 
@@ -15,4 +17,21 @@
 }
 .sign-form h3 {
   text-align: center;
+}
+.user-login, .user-password {
+  height: 25px;
+}
+.wrong-login, .wrong-password {
+  position: absolute;
+  color: rgb(255, 0, 0);
+}
+.wrong-login {
+  bottom: 242px;
+}
+.wrong-password {
+  bottom: 186px;
+}
+.sign-in , .change-for-create{
+  width: 170px;
+  margin: auto;
 }
