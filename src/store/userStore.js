@@ -7,6 +7,8 @@ class UserStore {
     userPassword = '';
     invalidPassword = false;
     invalidLogin = false;
+    focusLogin = false;
+    focusPassword = false;
 
     constructor() {
         makeObservable(this, {
@@ -15,6 +17,8 @@ class UserStore {
             userPassword: observable,
             invalidPassword: observable,
             invalidLogin: observable,
+            focusLogin: observable,
+            focusPassword: observable,
             signText: computed,
             signLink: computed,
             buttonDisabled: computed,
@@ -23,6 +27,8 @@ class UserStore {
             putUserLogin: action,
             putUserPassword: action,
             onCompletedForm: action,
+            onFocusLogin: action,
+            onFocusPassword: action,
 
         })
     }
@@ -54,8 +60,8 @@ class UserStore {
         userStore.userLogin = e.target.value;
         if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
         else userStore.invalidLogin = true;
+        }
 
-    }
     putUserPassword(e) {
         userStore.userPassword = e.target.value;
         if (userStore.userPassword.length < 5) userStore.invalidPassword = false;
@@ -69,7 +75,9 @@ class UserStore {
         } else { return true }
     }
     onCompletedForm() {
-        if (userStore.signIn) { }
+        if (userStore.signIn) {
+
+        }
         else {
             axios({
                 method: "post",
@@ -84,6 +92,14 @@ class UserStore {
 
         }
     }
+
+    onFocusLogin () {
+        userStore.focusLogin = !userStore.focusLogin;
+    }
+    onFocusPassword() {
+        userStore.focusPassword = !userStore.focusPassword;  
+    }
+
 }
 const userStore = new UserStore();
 export default userStore;

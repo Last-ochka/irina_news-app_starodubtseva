@@ -10,7 +10,7 @@ const SignForm = () => {
       <div className="openArticle openArticle__sign-container">
         <form className="sign-form">
           <h3>{userStore.signText}</h3>
-          {!userStore.invalidLogin ? (
+          {(!userStore.invalidLogin && userStore.focusLogin) ? (
             <small className="wrong-login">Invalid username</small>
           ) : (
             <></>
@@ -19,10 +19,12 @@ const SignForm = () => {
             className="user-login"
             value={userStore.userLogin}
             onChange={(e) => userStore.putUserLogin(e)}
+            onBlur={userStore.onFocusLogin}
+            onFocus={userStore.onFocusLogin}
             placeholder="login"
             type="text"
           />
-          {!userStore.invalidPassword ? (
+          {(!userStore.invalidPassword && userStore.focusPassword) ? (
             <small className="wrong-password">Invalid password</small>
           ) : (
             <></>
@@ -31,6 +33,8 @@ const SignForm = () => {
             className="user-password"
             value={userStore.userPassword}
             onChange={(e) => userStore.putUserPassword(e)}
+            onBlur={userStore.onFocusPassword}
+            onFocus={userStore.onFocusPassword}
             placeholder="password"
             type="password"
           />
