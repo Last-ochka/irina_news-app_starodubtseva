@@ -7,12 +7,26 @@ import Card from "../components/Card";
 import ModalWindow from "../components/ModalWindow";
 import NewsPagination from "../components/NewsPagination";
 import { Link } from "react-router-dom";
+import userStore from "../store/userStore";
+import { useCookies } from "react-cookie";
 
 const NewsPage = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+
   useEffect(() => {
     store.getArticles();
     store.getAllArticles();
   }, [store.articlesLength, store.pages, store.page]);
+
+
+  // useEffect(() => {
+  //   setCookie("token", userStore.token, {
+  //     path: "/",
+  //     maxAge: 30,
+  //     sameSite: "strict",
+  //   });
+    
+  // }, [userStore.token]);
 
   const text = store.lastArticleId;
   return (

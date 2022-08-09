@@ -6,17 +6,16 @@ import { runInAction } from "mobx";
 import { useCookies, Cookies } from "react-cookie";
 
 const Test = () => {
-
-    const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const getFiles = () => {
-      console.log('userStor token: ' , userStore.token);
-      console.log('cook token: ' , cookies['token']);
+    console.log("userStor token: ", userStore.token);
+    console.log("cook token: ", cookies["token"]);
     axios({
       method: "get",
       url: "http://localhost:3000/tasks",
       headers: {
-        Authorization: cookies['token'],
+        Authorization: cookies["token"],
       },
     })
       .then(function (response) {
@@ -29,42 +28,49 @@ const Test = () => {
       });
   };
 
+  const removeCooc = () => {
+    removeCookie("token");
+  };
+  const logCooc = () => {
+    console.log(" cook.token:  ", cookies.token);
+    console.log(" document.cookie:  ", document.cookie);
+    let a= document.cookie
+    console.log( a );
+  };
 
-
-  const getToken= () => {
+  const getToken = () => {
     axios({
-        method: "post",
-        url: "http://localhost:3000/auth/login",
-        data: {
-            login: 'new',
-            password: '11',
-        },
+      method: "post",
+      url: "http://localhost:3000/auth/login",
+      data: {
+        login: "new",
+        password: "11",
+      },
     })
-        .then(function (response) {
-            console.log(response.data.token, "token store", userStore.token);
-            setCookie('token', response.data.token, { path: '/' });
-            let a = cookies['token']
-            console.log(response.data.token, "cookies", a );
-            console.log('cook tok:  ', a)
-            // removeCookie('token')
-            // console.log(document.cookie, 'end')
-        })
-        .catch(function (error) {
-            console.log(error);
+      .then(function (response) {
+        console.log("111 data ", response.data.token);
+        setCookie("token", response.data.token, {
+          path: "/",
+          maxAge: 300,
+          sameSite: "strict",
         });
-};
-
-
+        console.log("222 cook tok:  ", cookies["token"]);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // removeCookie("token");
+  };
 
   return (
     <div>
       <button onClick={userStore.getToken}>Token</button>
       <button onClick={getFiles}>files</button>
-      <button onClick={getToken}>cookies</button>
-      
+      <button onClick={getToken}>get cookies</button>
+      <button onClick={removeCooc}>remove cookies</button>
+      <button onClick={logCooc}>log cookies</button>
     </div>
   );
 };
-
 
 export default Test;

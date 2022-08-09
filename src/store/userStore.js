@@ -63,13 +63,13 @@ class UserStore {
 
     putUserLogin(e) {
         userStore.userLogin = e.target.value;
-        if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
+        if (userStore.userLogin.length < 2) userStore.invalidLogin = false;
         else userStore.invalidLogin = true;
     }
 
     putUserPassword(e) {
         userStore.userPassword = e.target.value;
-        if (userStore.userPassword.length < 5) userStore.invalidPassword = false;
+        if (userStore.userPassword.length < 2) userStore.invalidPassword = false;
         else userStore.invalidPassword = true;
     }
 
@@ -81,7 +81,26 @@ class UserStore {
     }
     onCompletedForm() {
         if (userStore.signIn) {
-
+            axios({
+                method: "post",
+                url: "http://localhost:3000/auth/login",
+                data: {
+                    login: userStore.userLogin,
+                    password: userStore.userPassword,
+                },
+              })
+                .then(function (response) {
+                  console.log("111 data ", response.data.token);
+                //   setCookie("token", response.data.token, {
+                //     path: "/",
+                //     maxAge: 300,
+                //     sameSite: "strict",
+                //   });
+                //   console.log("222 cook tok:  ", cookies["token"]);
+                })
+                .catch(function (error) {
+                  console.log(error);
+                });
         }
         else {
             axios({
@@ -118,8 +137,12 @@ class UserStore {
             },
         })
             .then(function (response) {
+                runInAction(() => {
+                   userStore.token = response.data.token;
+                   
+                })
                
-                userStore.token = response.data.token;
+                
                 console.log(response.data.token, "00000", userStore.token);
             })
             .catch(function (error) {
