@@ -11,8 +11,7 @@ class UserStore {
     focusLogin = false;
     focusPassword = false;
     token = '';
-    // dateOfauthoriz ;
-
+   
     constructor() {
         makeObservable(this, {
             signIn: observable,
@@ -119,7 +118,7 @@ class UserStore {
             },
         })
             .then(function (response) {
-
+               
                 userStore.token = response.data.token;
                 console.log(response.data.token, "00000", userStore.token);
             })

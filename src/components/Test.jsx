@@ -3,35 +3,20 @@ import axios from "axios";
 import { useState } from "react";
 import userStore from "../store/userStore";
 import { runInAction } from "mobx";
+import { useCookies, Cookies } from "react-cookie";
 
 const Test = () => {
-//   const getToken = () => {
-//     axios({
-//       method: "post",
-//       url: "http://localhost:3000/auth/login",
-//       data: {
-//         login: 'new',
-//         password: '11',
-//       },
-//     })
-//       .then(function (response) {
-//         runInAction(() => {
-//           userStore.token = response.data.token;
-//           console.log(response.data.token, "00000", userStore.token);
-//         });
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//       });
-//   };
+
+    const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   const getFiles = () => {
-      console.log('token: ' , userStore.token);
+      console.log('userStor token: ' , userStore.token);
+      console.log('cook token: ' , cookies['token']);
     axios({
       method: "get",
       url: "http://localhost:3000/tasks",
       headers: {
-        Authorization: userStore.token,
+        Authorization: cookies['token'],
       },
     })
       .then(function (response) {
@@ -44,29 +29,42 @@ const Test = () => {
       });
   };
 
+
+
+  const getToken= () => {
+    axios({
+        method: "post",
+        url: "http://localhost:3000/auth/login",
+        data: {
+            login: 'new',
+            password: '11',
+        },
+    })
+        .then(function (response) {
+            console.log(response.data.token, "token store", userStore.token);
+            setCookie('token', response.data.token, { path: '/' });
+            let a = cookies['token']
+            console.log(response.data.token, "cookies", a );
+            console.log('cook tok:  ', a)
+            // removeCookie('token')
+            // console.log(document.cookie, 'end')
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+};
+
+
+
   return (
     <div>
       <button onClick={userStore.getToken}>Token</button>
-      <button onClick={getFiles}>Test Ruby</button>
+      <button onClick={getFiles}>files</button>
+      <button onClick={getToken}>cookies</button>
+      
     </div>
   );
 };
 
-// axios
-// .get("http://localhost:3000/users/24", {
-//   method: "GET",
-
-//   headers: {
-//     Authorization:
-//       "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyNSwiZXhwIjoxN…TExfQ.-np_efe6OTEYZs-lhQuarvuKKcZqhazGbLcKLdhFY7M",
-//   },
-// })
-// .then((res) => {
-//   console.log(res.data);
-// })
-// .catch((error) => {
-//   alert(error);
-// });
-//
 
 export default Test;
