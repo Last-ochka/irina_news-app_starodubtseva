@@ -1,6 +1,7 @@
 import { observable, action, makeObservable, runInAction, computed } from "mobx";
 import axios, * as others from 'axios';
 
+
 class UserStore {
     signIn = true;
     userLogin = '';
@@ -9,6 +10,7 @@ class UserStore {
     invalidLogin = false;
     focusLogin = false;
     focusPassword = false;
+    token = '';
 
     constructor() {
         makeObservable(this, {
@@ -29,6 +31,7 @@ class UserStore {
             onCompletedForm: action,
             onFocusLogin: action,
             onFocusPassword: action,
+            refreshForm: action,
 
         })
     }
@@ -76,7 +79,7 @@ class UserStore {
     }
     onCompletedForm() {
         if (userStore.signIn) {
-
+           
         }
         else {
             axios({
@@ -89,7 +92,6 @@ class UserStore {
             });
             userStore.userPassword = '';
             userStore.userLogin = '';
-
         }
     }
 
@@ -98,6 +100,10 @@ class UserStore {
     }
     onFocusPassword() {
         userStore.focusPassword = !userStore.focusPassword;  
+    }
+    refreshForm () {
+        userStore.userLogin = '';
+        userStore.userPassword = '';
     }
 
 }

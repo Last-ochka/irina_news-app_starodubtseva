@@ -3,8 +3,20 @@ import { Link } from "react-router-dom";
 import "./SignForm.css";
 import userStore from "../store/userStore";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
 
 const SignForm = () => {
+
+  const navigate = useNavigate();
+
+const onClickSubmit = () => {
+ userStore.onCompletedForm ();
+  if (!userStore.signIn) {
+navigate('/')
+  };
+ 
+}
+
   return (
     <div className="modal-window">
       <div className="openArticle openArticle__sign-container">
@@ -22,7 +34,7 @@ const SignForm = () => {
             onBlur={userStore.onFocusLogin}
             onFocus={userStore.onFocusLogin}
             placeholder="login"
-            type="text"
+            type="text"         
           />
           {(!userStore.invalidPassword && userStore.focusPassword) ? (
             <small className="wrong-password">Invalid password</small>
@@ -39,8 +51,9 @@ const SignForm = () => {
             type="password"
           />
           <button
+          type="button"
             disabled={userStore.buttonDisabled}
-            onClick={userStore.onCompletedForm}
+            onClick={onClickSubmit}
             className="sign-in"
           >
             {userStore.signText}
@@ -52,7 +65,7 @@ const SignForm = () => {
           >
             {userStore.signLink}
           </button>
-          <Link to="/">Back</Link>
+          <Link onClick={userStore.refreshForm} to="/">Back</Link>
         </form>
       </div>
     </div>
