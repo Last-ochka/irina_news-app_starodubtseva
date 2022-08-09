@@ -11,6 +11,7 @@ class UserStore {
     focusLogin = false;
     focusPassword = false;
     token = '';
+    // dateOfauthoriz ;
 
     constructor() {
         makeObservable(this, {
@@ -23,6 +24,7 @@ class UserStore {
             focusPassword: observable,
             signText: computed,
             signLink: computed,
+            token: observable,
             buttonDisabled: computed,
             onSign: action,
             onSignDefault: action,
@@ -32,6 +34,7 @@ class UserStore {
             onFocusLogin: action,
             onFocusPassword: action,
             refreshForm: action,
+            getToken: action,
 
         })
     }
@@ -63,7 +66,7 @@ class UserStore {
         userStore.userLogin = e.target.value;
         if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
         else userStore.invalidLogin = true;
-        }
+    }
 
     putUserPassword(e) {
         userStore.userPassword = e.target.value;
@@ -79,7 +82,7 @@ class UserStore {
     }
     onCompletedForm() {
         if (userStore.signIn) {
-           
+
         }
         else {
             axios({
@@ -95,16 +98,35 @@ class UserStore {
         }
     }
 
-    onFocusLogin () {
+    onFocusLogin() {
         userStore.focusLogin = !userStore.focusLogin;
     }
     onFocusPassword() {
-        userStore.focusPassword = !userStore.focusPassword;  
+        userStore.focusPassword = !userStore.focusPassword;
     }
-    refreshForm () {
+    refreshForm() {
         userStore.userLogin = '';
         userStore.userPassword = '';
     }
+
+    getToken() {
+        axios({
+            method: "post",
+            url: "http://localhost:3000/auth/login",
+            data: {
+                login: 'new',
+                password: '11',
+            },
+        })
+            .then(function (response) {
+
+                userStore.token = response.data.token;
+                console.log(response.data.token, "00000", userStore.token);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
 }
 const userStore = new UserStore();
