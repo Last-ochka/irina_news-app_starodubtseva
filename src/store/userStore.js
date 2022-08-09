@@ -91,6 +91,10 @@ class UserStore {
               })
                 .then(function (response) {
                   console.log("111 data ", response.data.token);
+                  runInAction(() => {
+                    userStore.token = response.data.token;
+                })
+                  
                 //   setCookie("token", response.data.token, {
                 //     path: "/",
                 //     maxAge: 300,

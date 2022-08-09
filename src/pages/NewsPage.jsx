@@ -19,14 +19,15 @@ const NewsPage = () => {
   }, [store.articlesLength, store.pages, store.page]);
 
 
-  // useEffect(() => {
-  //   setCookie("token", userStore.token, {
-  //     path: "/",
-  //     maxAge: 30,
-  //     sameSite: "strict",
-  //   });
+  useEffect(() => {
+    if (userStore.token) 
+    setCookie("token", userStore.token, {
+      path: "/",
+      maxAge: 30,
+      sameSite: "strict",
+    });
     
-  // }, [userStore.token]);
+  }, [userStore.token]);
 
   const text = store.lastArticleId;
   return (

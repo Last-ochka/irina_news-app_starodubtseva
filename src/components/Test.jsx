@@ -34,8 +34,8 @@ const Test = () => {
   const logCooc = () => {
     console.log(" cook.token:  ", cookies.token);
     console.log(" document.cookie:  ", document.cookie);
-    let a= document.cookie
-    console.log( a );
+
+    console.log('user store', userStore.token );
   };
 
   const getToken = () => {
