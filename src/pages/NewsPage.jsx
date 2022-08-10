@@ -14,10 +14,16 @@ const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   useEffect(() => {
-    store.getArticles();
-    store.getAllArticles();
-  }, [store.articlesLength, store.pages, store.page]);
+    if (cookies["token"]) {
+    store.getArticles('http://localhost:3000/all', cookies["token"]);
+    // store.getAllArticles('http://localhost:3000/all');
+    } else {
+      store.getArticles('http://localhost:3000/tasks');
+      store.getAllArticles('http://localhost:3000/tasks');
+    }
 
+   
+  }, [store.articlesLength, store.pages, store.page, cookies["token"]]);
 
   useEffect(() => {
     if (userStore.token) 
@@ -26,9 +32,17 @@ const NewsPage = () => {
       maxAge: 30,
       sameSite: "strict",
     });
-    
   }, [userStore.token]);
 
+
+  useEffect(() => {
+    if (!userStore.authorized) 
+  logOut();
+  }, [userStore.authorized]);
+
+  const logOut = () => {
+    removeCookie("token");
+  }
   const text = store.lastArticleId;
   return (
     <div className="news-page">
@@ -41,10 +55,19 @@ const NewsPage = () => {
       <button onClick={store.createArticle} className="createArticle">
         New Article
       </button>
-      {/* XXX ? <button log out />   Logged in as current_user.email(login) :  */}
-      <Link onClick={store.onSignDefault} to="signin">
-        Sign In
-      </Link>
+
+      {cookies["token"] ? (
+        <>
+          <p> Logged in as {}</p>
+          <Link onClick={userStore.onLogOut} to="/">
+            Log out
+          </Link>
+        </>
+      ) : (
+        <Link onClick={store.onSignDefault} to="signin">
+          Sign In
+        </Link>
+      )}
 
       {store.articles.length < 1 && store.loading === false ? (
         <p className="no-articles">No articles, sorry</p>

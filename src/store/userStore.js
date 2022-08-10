@@ -11,7 +11,8 @@ class UserStore {
     focusLogin = false;
     focusPassword = false;
     token = '';
-   
+    authorized = true;
+
     constructor() {
         makeObservable(this, {
             signIn: observable,
@@ -21,12 +22,13 @@ class UserStore {
             invalidLogin: observable,
             focusLogin: observable,
             focusPassword: observable,
+            token: observable,
             signText: computed,
             signLink: computed,
-            token: observable,
+            authorized: observable,
             buttonDisabled: computed,
             onSign: action,
-            onSignDefault: action,
+            // onSignDefault: action,
             putUserLogin: action,
             putUserPassword: action,
             onCompletedForm: action,
@@ -34,6 +36,7 @@ class UserStore {
             onFocusPassword: action,
             refreshForm: action,
             getToken: action,
+            onLogOut: action,
 
         })
     }
@@ -42,16 +45,17 @@ class UserStore {
         userStore.signIn = !userStore.signIn;
         userStore.userLogin = '';
         userStore.userPassword = '';
-        if (userStore.userLogin.length < 5) userStore.invalidLogin = false;
+        if (userStore.userLogin.length < 2) userStore.invalidLogin = false;
         else userStore.invalidLogin = true;
-        if (userStore.userPassword.length < 5) userStore.invalidPassword = false;
+        if (userStore.userPassword.length < 2) userStore.invalidPassword = false;
         else userStore.invalidPassword = true;
 
     }
 
-    onSignDefault = () => {
-        userStore.signIn = true;
-    }
+    // onSignDefault = () => {
+    //     console.log('hi');
+    //     userStore.signIn = true;
+    // }
 
     get signText() {
         return (userStore.signIn === true ? 'Sign In' : 'Sign Up')
@@ -88,23 +92,19 @@ class UserStore {
                     login: userStore.userLogin,
                     password: userStore.userPassword,
                 },
-              })
+            })
                 .then(function (response) {
-                  console.log("111 data ", response.data.token);
-                  runInAction(() => {
-                    userStore.token = response.data.token;
-                })
-                  
-                //   setCookie("token", response.data.token, {
-                //     path: "/",
-                //     maxAge: 300,
-                //     sameSite: "strict",
-                //   });
-                //   console.log("222 cook tok:  ", cookies["token"]);
+                    console.log("111 data ", response.data.token);
+                    runInAction(() => {
+                        userStore.token = response.data.token;
+                        userStore.authorized = true;
+                    })
                 })
                 .catch(function (error) {
-                  console.log(error);
+                    console.log(error);
                 });
+            userStore.userPassword = '';
+            userStore.userLogin = '';
         }
         else {
             axios({
@@ -142,17 +142,20 @@ class UserStore {
         })
             .then(function (response) {
                 runInAction(() => {
-                   userStore.token = response.data.token;
-                   
+                    userStore.token = response.data.token;
+
                 })
-               
-                
+
+
                 console.log(response.data.token, "00000", userStore.token);
             })
             .catch(function (error) {
                 console.log(error);
             });
     };
+onLogOut () {
+    userStore.authorized = false;
+}
 
 }
 const userStore = new UserStore();

@@ -13,7 +13,7 @@ const Test = () => {
     console.log("cook token: ", cookies["token"]);
     axios({
       method: "get",
-      url: "http://localhost:3000/tasks",
+      url: "http://localhost:3000/all",
       headers: {
         Authorization: cookies["token"],
       },
@@ -36,6 +36,7 @@ const Test = () => {
     console.log(" document.cookie:  ", document.cookie);
 
     console.log('user store', userStore.token );
+    console.log('authorized', userStore.authorized )
   };
 
   const getToken = () => {

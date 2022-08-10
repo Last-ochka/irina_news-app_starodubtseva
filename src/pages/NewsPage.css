@@ -14,3 +14,13 @@ h1 {
 .createArticle {
   margin-right: 1500px;
 }
+.news-page a {
+  display: block;
+    border: 1px;
+    border-style: groove;
+    border-color: black;
+    width: 74px;
+    margin-left: 90%;
+    text-decoration: none;
+    color: black;
+}

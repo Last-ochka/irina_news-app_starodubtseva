@@ -14,6 +14,7 @@ class Store {
     editableArticle = {};
     editModal = false;
     allArticles = [];
+    // urlForArticles = true;
 
     constructor() {
         makeObservable(this, {
@@ -28,6 +29,7 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             allArticles: observable,
+            // urlForArticles: observable,
             pages: computed,
             lastArticleId: computed,
             articlesLength: computed,
@@ -47,28 +49,46 @@ class Store {
         })
     }
 
-    getArticles = () => {
+    getArticles = (url, token) => {
         store.loading = true;
-        axios
-            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
-            // .get('http://localhost:3000/tasks')   // from ruby
+        console.log(token)
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+              Authorization: token,
+            },
+          })
             .then(function (response) {
-                runInAction(() => {
-                    store.articles = response.data.items;
-                    // store.articles=response.data  //  from ruby
-                    store.loading = false;
-                })
+              runInAction(() => {
+                store.articles = response.data;
+                store.loading = false;
+              });
             })
             .catch(function (error) {
-                console.log(error);
-            })
+              console.log(error);
+            });
+        
+        // axios
+        //     // .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
+        //     .get(url)   // from ruby
+        //     .then(function (response) {
+        //         runInAction(() => {
+        //             store.articles = response.data;
+        //             store.loading = false;
+        //         })
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     })
     }
-    getAllArticles = () =>
+    getAllArticles = (url) =>
         axios
-            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
+            // .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
+            .get(url) 
             .then(function (response) {
                 runInAction(() => {
-                    store.allArticles = response.data.items;
+                    store.allArticles = response.data;
                 })
             })
             .catch(function (error) {
@@ -149,10 +169,10 @@ class Store {
                 method: "post",
                 url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
                 data: {
-                    createdAt: Date.now(),
+                  
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                    id: store.lastArticleId + 1,
+                   
                 },
             })
                 .then(() => runInAction(() => {
