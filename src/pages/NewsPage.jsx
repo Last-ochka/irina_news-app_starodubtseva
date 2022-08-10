@@ -12,37 +12,33 @@ import { useCookies } from "react-cookie";
 
 const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-
   useEffect(() => {
     if (cookies["token"]) {
-    store.getArticles('http://localhost:3000/all', cookies["token"]);
-    // store.getAllArticles('http://localhost:3000/all');
+      store.getArticles("http://localhost:3000/all", cookies["token"]);
+      store.getAllArticles('http://localhost:3000/all', cookies["token"]);
+      userStore.findUser(cookies["token"]);
     } else {
-      store.getArticles('http://localhost:3000/tasks');
-      store.getAllArticles('http://localhost:3000/tasks');
+      store.getArticles("http://localhost:3000/tasks");
+      store.getAllArticles("http://localhost:3000/tasks");
     }
-
-   
   }, [store.articlesLength, store.pages, store.page, cookies["token"]]);
 
   useEffect(() => {
-    if (userStore.token) 
-    setCookie("token", userStore.token, {
-      path: "/",
-      maxAge: 30,
-      sameSite: "strict",
-    });
+    if (userStore.token)
+      setCookie("token", userStore.token, {
+        path: "/",
+        maxAge: 30,
+        sameSite: "strict",
+      });
   }, [userStore.token]);
 
-
   useEffect(() => {
-    if (!userStore.authorized) 
-  logOut();
+    if (!userStore.authorized) logOut();
   }, [userStore.authorized]);
 
   const logOut = () => {
     removeCookie("token");
-  }
+  };
   const text = store.lastArticleId;
   return (
     <div className="news-page">
@@ -52,13 +48,17 @@ const NewsPage = () => {
       ) : (
         <h2>Amount of news: {store.articlesLength}</h2>
       )}
-      <button onClick={store.createArticle} className="createArticle">
-        New Article
-      </button>
+      {cookies["token"] ? (
+        <button onClick={store.createArticle} className="createArticle">
+          New Article
+        </button>
+      ) : (
+        <></>
+      )}
 
       {cookies["token"] ? (
         <>
-          <p> Logged in as {}</p>
+          <p> Logged in as {userStore.curretnUser.login}</p>
           <Link onClick={userStore.onLogOut} to="/">
             Log out
           </Link>
@@ -74,8 +74,15 @@ const NewsPage = () => {
       ) : (
         <ul className="newsArticle">
           {store.articles.map((article) => {
-            let data = new Date(article.createdAt).toLocaleDateString();
-            return <Card key={Math.random()} article={article} data={data} />;
+            let data = new Date(article.created_at).toLocaleDateString();
+            return (
+              <Card
+                key={Math.random()}
+                article={article}
+                data={data}
+                logged={cookies["token"]}
+              />
+            );
           })}
         </ul>
       )}

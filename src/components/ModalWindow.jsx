@@ -17,7 +17,7 @@ const ModalWindow = () => {
         </button>
         <p>{store.shownArticle.text}</p>
         <small>
-          {new Date(store.shownArticle.createdAt).toLocaleDateString()}
+          {new Date(store.shownArticle.created_at).toLocaleDateString()}
         </small>
       </div>
     </div>

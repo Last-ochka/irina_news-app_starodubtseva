@@ -12,6 +12,7 @@ class UserStore {
     focusPassword = false;
     token = '';
     authorized = true;
+    curretnUser = {};
 
     constructor() {
         makeObservable(this, {
@@ -23,9 +24,10 @@ class UserStore {
             focusLogin: observable,
             focusPassword: observable,
             token: observable,
+            curretnUser: observable, 
+            authorized: observable,
             signText: computed,
             signLink: computed,
-            authorized: observable,
             buttonDisabled: computed,
             onSign: action,
             // onSignDefault: action,
@@ -37,6 +39,7 @@ class UserStore {
             refreshForm: action,
             getToken: action,
             onLogOut: action,
+            findUser: action,
 
         })
     }
@@ -83,6 +86,7 @@ class UserStore {
             return false
         } else { return true }
     }
+
     onCompletedForm() {
         if (userStore.signIn) {
             axios({
@@ -153,9 +157,28 @@ class UserStore {
                 console.log(error);
             });
     };
-onLogOut () {
-    userStore.authorized = false;
-}
+    onLogOut() {
+        userStore.authorized = false;
+    }
+
+
+    findUser(token) {
+        axios({
+            method: "get",
+            url: "http://localhost:3000/login",
+            headers: {
+                Authorization: token,
+            },
+        })
+            .then(function (response) {
+                runInAction(() => {
+                    userStore.curretnUser = response.data;
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }
 
 }
 const userStore = new UserStore();

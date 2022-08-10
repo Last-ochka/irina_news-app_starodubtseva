@@ -51,41 +51,32 @@ class Store {
 
     getArticles = (url, token) => {
         store.loading = true;
-        console.log(token)
         axios({
             method: "get",
             url: url,
             headers: {
-              Authorization: token,
+                Authorization: token,
             },
-          })
+        })
             .then(function (response) {
-              runInAction(() => {
-                store.articles = response.data;
-                store.loading = false;
-              });
+                runInAction(() => {
+                    store.articles = response.data;
+                    console.log(response.data.slice(store.page*4-4, store.page*4))
+                    store.loading = false;
+                });
             })
             .catch(function (error) {
-              console.log(error);
+                console.log(error);
             });
-        
-        // axios
-        //     // .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
-        //     .get(url)   // from ruby
-        //     .then(function (response) {
-        //         runInAction(() => {
-        //             store.articles = response.data;
-        //             store.loading = false;
-        //         })
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     })
     }
-    getAllArticles = (url) =>
-        axios
-            // .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
-            .get(url) 
+    getAllArticles = (url, token) =>
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: token,
+            },
+        })
             .then(function (response) {
                 runInAction(() => {
                     store.allArticles = response.data;
@@ -94,6 +85,7 @@ class Store {
             .catch(function (error) {
                 console.log(error);
             })
+
     deleteArticle = (id) => {
         axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/' + id)
             .then(() => {
@@ -169,10 +161,10 @@ class Store {
                 method: "post",
                 url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
                 data: {
-                  
+
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                   
+
                 },
             })
                 .then(() => runInAction(() => {
@@ -229,15 +221,15 @@ class Store {
                     id: store.editableArticle.id,
                 },
             })
-            .then(() => {
-                runInAction(() => {
-                    store.getAllArticles();
-                    store.getArticles();
-                    store.closeModalForm();
-                    store.newArticleTitle = '';
-                    store.newArticleText = '';
+                .then(() => {
+                    runInAction(() => {
+                        store.getAllArticles();
+                        store.getArticles();
+                        store.closeModalForm();
+                        store.newArticleTitle = '';
+                        store.newArticleText = '';
+                    })
                 })
-            })
         }
     }
 }
