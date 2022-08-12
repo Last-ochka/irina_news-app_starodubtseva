@@ -21,13 +21,13 @@ const NewsPage = () => {
       store.getArticles(`http://localhost:3000/tasks/page/${store.page}`);
       store.getAllArticles(`http://localhost:3000/tasks/length`);
     }
-  }, [store.articlesLength, store.pages, store.page, cookies["token"]]);
+  }, [store.articlesLength, store.pages, store.lengthIsChange, store.page, cookies["token"]]);
 
   useEffect(() => {
     if (userStore.token)
       setCookie("token", userStore.token, {
         path: "/",
-        maxAge: 30,
+        maxAge: 300,
         sameSite: "strict",
       });
   }, [userStore.token]);
@@ -94,7 +94,7 @@ const NewsPage = () => {
       )}
 
       {store.newArticle ? (
-        <ModalForm onClickModal={() => store.onNewSubmit()} />
+        <ModalForm onClickModal={() => store.onNewSubmit(cookies['token'])} />
       ) : (
         <></>
       )}

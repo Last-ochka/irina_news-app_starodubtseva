@@ -24,7 +24,7 @@ class UserStore {
             focusLogin: observable,
             focusPassword: observable,
             token: observable,
-            curretnUser: observable, 
+            curretnUser: observable,
             authorized: observable,
             signText: computed,
             signLink: computed,
@@ -98,7 +98,6 @@ class UserStore {
                 },
             })
                 .then(function (response) {
-                    console.log("111 data ", response.data.token);
                     runInAction(() => {
                         userStore.token = response.data.token;
                         userStore.authorized = true;
@@ -149,9 +148,6 @@ class UserStore {
                     userStore.token = response.data.token;
 
                 })
-
-
-                console.log(response.data.token, "00000", userStore.token);
             })
             .catch(function (error) {
                 console.log(error);

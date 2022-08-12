@@ -16,6 +16,7 @@ class Store {
     // allArticles = [];
     articlesLength = 0;
     // urlForArticles = true;
+    lengthIsChange = false;
 
     constructor() {
         makeObservable(this, {
@@ -29,6 +30,7 @@ class Store {
             page: observable,
             editableArticle: observable,
             editModal: observable,
+            lengthIsChange: observable,
             // allArticles: observable,
             // urlForArticles: observable,
             pages: computed,
@@ -86,11 +88,17 @@ class Store {
                 console.log(error);
             })
 
-    deleteArticle = (id) => {
-        axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/' + id)
+    deleteArticle = (id, token) => {
+        axios({
+            method: "delete",
+            url: (`http://localhost:3000/tasks/` + id),
+            headers: {
+                Authorization: token,
+            },
+        })
             .then(() => {
                 runInAction(() => {
-                    store.getAllArticles();
+                    store.lengthIsChange = !store.lengthIsChange;
                 })
             })
     }
@@ -150,7 +158,7 @@ class Store {
         store.editModal = !store.editModal;
     };
 
-    onNewSubmit = () => {
+    onNewSubmit = (token) => {
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
@@ -159,7 +167,10 @@ class Store {
         else
             axios({
                 method: "post",
-                url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
+                url: "http://localhost:3000/tasks",
+                headers: {
+                    Authorization: token,
+                },
                 data: {
 
                     title: store.newArticleTitle,
@@ -168,7 +179,8 @@ class Store {
                 },
             })
                 .then(() => runInAction(() => {
-                    store.getAllArticles();
+                    store.lengthIsChange = !store.lengthIsChange;
+
                     store.closeModalForm();
                     store.newArticleTitle = '';
                     store.newArticleText = '';

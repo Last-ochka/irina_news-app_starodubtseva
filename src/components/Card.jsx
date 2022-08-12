@@ -25,7 +25,7 @@ const Card = (props) => {
         {logged ? (
           <button
             onClick={() => {
-              store.deleteArticle(article.id);
+              store.deleteArticle(article.id, logged);
             }}
             className="buttons_delete-button"
           >
