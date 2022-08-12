@@ -57,7 +57,7 @@ const NewsPage = () => {
   return (
     <div className="news-page">
       <div className="header-container">
-      <h1>Список новостей</h1>
+      <h1>News list</h1>
       {store.loading ? (
         <h2>Wait...</h2>
       ) : (
@@ -83,15 +83,15 @@ const NewsPage = () => {
         {cookies["token"] ? (
           <>
             <p className="loggedAs">
-              {" "}
+       
               Logged in as {userStore.curretnUser.login}
             </p>
-            <Link onClick={userStore.onLogOut} to="/">
+            <Link className="onLogOut" onClick={userStore.onLogOut} to="/">
               Log out
             </Link>
           </>
         ) : (
-          <Link onClick={userStore.onSignDefault} to="signin">
+          <Link className="signIn" onClick={userStore.onSignDefault} to="signin">
             Sign In
           </Link>
         )}

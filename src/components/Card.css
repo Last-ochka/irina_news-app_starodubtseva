@@ -40,9 +40,12 @@ h2 {
   height: 30px;
   margin: auto;
 }
-small {
+.article small {
   margin: auto;
 }
 .buttons_edit-button {
   margin-right: 5px;
+}
+.author {
+  text-align: left;
 }

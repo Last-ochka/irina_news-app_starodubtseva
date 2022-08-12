@@ -39,7 +39,7 @@ h1 {
   height: 30px;
   left: 120px;
   margin-left: 3px; 
-  /* margin-right: 1397px; */
+  margin-right: 49%;
 }
 
 .loggedAs {
@@ -64,4 +64,7 @@ button {
   background-color: rgb(214 247 242 / 71%);
   border-radius: 17px;
   border-width: 1.5px;
+}
+a.signIn {
+  margin-top: 19px;
 }

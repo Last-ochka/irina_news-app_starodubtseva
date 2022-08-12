@@ -20,7 +20,7 @@ useEffect(() => {
 
   return (
     <div className="modal-window">
-      <div className="openArticle openArticle__sign-container">
+      <div className=" openArticle__sign-container">
         <form className="sign-form">
           <h3>{userStore.signText}</h3>
           {(!userStore.invalidLogin && userStore.focusLogin) ? (

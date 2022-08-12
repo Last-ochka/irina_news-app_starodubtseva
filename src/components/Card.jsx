@@ -8,7 +8,7 @@ import userStore from "../store/userStore";
 const Card = (props) => {
   const { article, data, logged } = props;
   return (
-    <li key={Math.random()} className="Article">
+    <li key={Math.random()} className="article">
       <h4>{article.title}</h4>
       <div className="buttons">
         {logged ? (
@@ -46,7 +46,7 @@ const Card = (props) => {
         View-more
       </button>
       <small>{data}</small>
-     <small>author:</small> <p>{userStore.curretnUser.login} </p>
+     <small>author:</small> <p className="author" >{article.user_id ? userStore.curretnUser.login : 'unknown'} </p>
     </li>
   );
 };

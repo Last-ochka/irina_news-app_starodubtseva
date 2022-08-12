@@ -210,9 +210,11 @@ class Store {
     }
     changeShownArticlesToAll () {
         store.showAllArticles = true;
+        store.page = 1;
     }
     changeShownArticlesToMy () {
         store.showAllArticles = false;
+        store.page = 1;
     }
     get myOrAll (){
         if (store.showAllArticles) {
