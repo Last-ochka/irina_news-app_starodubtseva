@@ -9,7 +9,7 @@ const Card = (props) => {
   const { article, data, logged } = props;
   return (
     <li key={Math.random()} className="Article">
-      <h5>{article.title}</h5>
+      <h4>{article.title}</h4>
       <div className="buttons">
         {logged ? (
           <button
@@ -46,7 +46,7 @@ const Card = (props) => {
         View-more
       </button>
       <small>{data}</small>
-      <p className="article_text">{userStore.curretnUser.login} </p>
+     <small>author:</small> <p>{userStore.curretnUser.login} </p>
     </li>
   );
 };

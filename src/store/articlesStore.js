@@ -15,6 +15,8 @@ class Store {
     editModal = false;
     articlesLength = 0;
     lengthIsChange = false;
+    showAllArticles = true;
+    
 
     constructor() {
         makeObservable(this, {
@@ -29,8 +31,10 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             lengthIsChange: observable,
-            pages: computed,
+            showAllArticles: observable,
             articlesLength: observable,
+            myOrAll: computed, 
+            pages: computed,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -44,6 +48,8 @@ class Store {
             closeModalForm: action,
             editArticleModalForm: action,
             editArticle: action,
+            changeShownArticlesToAll: action,
+            changeShownArticlesToMy: action,
         })
     }
 
@@ -181,24 +187,6 @@ class Store {
         } else if (!store.newArticleText) {
             alert("Text cannot be empty!")
         } else {
-            // axios({
-            //     method: "PATCH",
-            //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
-            //     data: {
-            //         createdAt: Date.now(),
-            //         title: store.newArticleTitle,
-            //         text: store.newArticleText,
-            //     },
-            // })
-            //     .then(() => {
-            //         runInAction(() => {
-            //             store.getAllArticles();
-            //             store.closeModalForm();
-            //             store.newArticleTitle = '';
-            //             store.newArticleText = '';
-            //         })
-            //     })
-
             axios({
                 method: "put",
                 url: ("http://localhost:3000/tasks/" + store.editableArticle.id),
@@ -218,6 +206,19 @@ class Store {
                         store.newArticleText = '';
                     })
                 })
+        }
+    }
+    changeShownArticlesToAll () {
+        store.showAllArticles = true;
+    }
+    changeShownArticlesToMy () {
+        store.showAllArticles = false;
+    }
+    get myOrAll (){
+        if (store.showAllArticles) {
+            return 'all'
+        } else {
+            return 'my'
         }
     }
 }

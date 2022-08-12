@@ -14,20 +14,33 @@ const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   useEffect(() => {
     if (cookies["token"]) {
-      store.getArticles(`http://localhost:3000/all/page/${store.page}`, cookies["token"]);
-      store.getAllArticles(`http://localhost:3000/all/length`, cookies["token"]);
+      store.getArticles(
+        `http://localhost:3000/${store.myOrAll}/page/${store.page}`,
+        cookies["token"]
+      ); // all -> store.myOrAll
+      store.getAllArticles(
+        `http://localhost:3000/${store.myOrAll}/length`,
+        cookies["token"]
+      );
       userStore.findUser(cookies["token"]);
     } else {
       store.getArticles(`http://localhost:3000/tasks/page/${store.page}`);
       store.getAllArticles(`http://localhost:3000/tasks/length`);
     }
-  }, [store.articlesLength, store.pages, store.lengthIsChange, store.page, cookies["token"]]);
+  }, [
+    store.articlesLength,
+    store.pages,
+    store.lengthIsChange,
+    store.page,
+    cookies["token"],
+    store.showAllArticles,
+  ]);
 
   useEffect(() => {
     if (userStore.token)
       setCookie("token", userStore.token, {
         path: "/",
-        maxAge: 40,
+        maxAge: 400,
         sameSite: "strict",
       });
   }, [userStore.token]);
@@ -43,12 +56,46 @@ const NewsPage = () => {
 
   return (
     <div className="news-page">
+      <div className="header-container">
       <h1>Список новостей</h1>
       {store.loading ? (
         <h2>Wait...</h2>
       ) : (
-        <h2>Amount of news: {store.articlesLength}</h2>
+        <h2>Amount of {store.myOrAll} news: {store.articlesLength}</h2>
       )}
+      </div>
+      <div className="nav-container">
+        {cookies["token"] ? (
+          <button onClick={store.changeShownArticlesToAll} className="allArticles">
+            All articles
+          </button>
+        ) : (
+          <></>
+        )}
+        {cookies["token"] ? (
+          <button onClick={store.changeShownArticlesToMy} className="myArticles">
+            My articles
+          </button>
+        ) : (
+          <></>
+        )}
+
+        {cookies["token"] ? (
+          <>
+            <p className="loggedAs">
+              {" "}
+              Logged in as {userStore.curretnUser.login}
+            </p>
+            <Link onClick={userStore.onLogOut} to="/">
+              Log out
+            </Link>
+          </>
+        ) : (
+          <Link onClick={userStore.onSignDefault} to="signin">
+            Sign In
+          </Link>
+        )}
+      </div>{" "}
       {cookies["token"] ? (
         <button onClick={store.createArticle} className="createArticle">
           New Article
@@ -56,20 +103,6 @@ const NewsPage = () => {
       ) : (
         <></>
       )}
-
-      {cookies["token"] ? (
-        <>
-          <p> Logged in as {userStore.curretnUser.login}</p>
-          <Link onClick={userStore.onLogOut} to="/">
-            Log out
-          </Link>
-        </>
-      ) : (
-        <Link onClick={userStore.onSignDefault} to="signin">
-          Sign In
-        </Link>
-      )}
-
       {store.articles.length < 1 && store.loading === false ? (
         <p className="no-articles">No articles, sorry</p>
       ) : (
@@ -89,13 +122,12 @@ const NewsPage = () => {
       )}
       {store.showModal ? <ModalWindow /> : <></>}
       {store.editModal ? (
-        <ModalForm onClickModal={() => store.onEditSubmit(cookies['token'])} />
+        <ModalForm onClickModal={() => store.onEditSubmit(cookies["token"])} />
       ) : (
         <></>
       )}
-
       {store.newArticle ? (
-        <ModalForm onClickModal={() => store.onNewSubmit(cookies['token'])} />
+        <ModalForm onClickModal={() => store.onNewSubmit(cookies["token"])} />
       ) : (
         <></>
       )}
