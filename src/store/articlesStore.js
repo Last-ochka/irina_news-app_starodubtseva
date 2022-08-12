@@ -13,7 +13,8 @@ class Store {
     page = 1;
     editableArticle = {};
     editModal = false;
-    allArticles = [];
+    // allArticles = [];
+    articlesLength = 0;
     // urlForArticles = true;
 
     constructor() {
@@ -28,11 +29,11 @@ class Store {
             page: observable,
             editableArticle: observable,
             editModal: observable,
-            allArticles: observable,
+            // allArticles: observable,
             // urlForArticles: observable,
             pages: computed,
             // lastArticleId: computed,
-            articlesLength: computed,
+            articlesLength: observable,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -78,7 +79,7 @@ class Store {
         })
             .then(function (response) {
                 runInAction(() => {
-                    store.allArticles = response.data;
+                    store.articlesLength = response.data;
                 })
             })
             .catch(function (error) {
@@ -94,24 +95,24 @@ class Store {
             })
     }
 
-    get articlesLength() {
-        return (
-            store.allArticles.length
-        )
-    }
+    // get articlesLength() {
+    //     return (
+    //         store.allArticles.length
+    //     )
+    // }
 
     get pages() {
         return Math.ceil(this.articlesLength / 6);
     }
-    // get lastArticleId() {
-        return (
-            (this.allArticles?.[this.articlesLength - 1]?.id) ?
+    // get lastArticleId() { ////////////////////////////////////////////////////////////// delete or change allArticles = length
+    //     return (
+    //         (this.allArticles?.[this.articlesLength - 1]?.id) ?
 
-                this.allArticles[this.articlesLength - 1].id : -1
-        )
-        // (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
-        // чтоб не забыть эквивалент 
-    }
+    //             this.allArticles[this.articlesLength - 1].id : -1
+    //     )
+    //     // (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
+    //     // чтоб не забыть эквивалент 
+    // }
     setPage(curretPage) {
         runInAction(() => {
             (store.articles.length > 0) ?
