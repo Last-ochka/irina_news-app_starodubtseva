@@ -27,7 +27,7 @@ const NewsPage = () => {
     if (userStore.token)
       setCookie("token", userStore.token, {
         path: "/",
-        maxAge: 300,
+        maxAge: 40,
         sameSite: "strict",
       });
   }, [userStore.token]);
@@ -64,7 +64,7 @@ const NewsPage = () => {
           </Link>
         </>
       ) : (
-        <Link onClick={store.onSignDefault} to="signin">
+        <Link onClick={userStore.onSignDefault} to="signin">
           Sign In
         </Link>
       )}

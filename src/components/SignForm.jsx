@@ -4,18 +4,25 @@ import "./SignForm.css";
 import userStore from "../store/userStore";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const SignForm = () => {
 
   const navigate = useNavigate();
 
 const onClickSubmit = () => {
- userStore.onCompletedForm ();
-  if (!userStore.signIn) {
+ userStore.onCompletedForm ()
+  if (userStore.authorized) {
 navigate('/')
   };
  
 }
+
+// useEffect(() => {
+//   if (userStore.authorized) {
+//     navigate('/')
+//       };
+// }, [!userStore.authorized]);
 
   return (
     <div className="modal-window">

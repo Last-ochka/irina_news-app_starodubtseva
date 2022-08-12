@@ -30,7 +30,7 @@ class UserStore {
             signLink: computed,
             buttonDisabled: computed,
             onSign: action,
-            // onSignDefault: action,
+            onSignDefault: action,
             putUserLogin: action,
             putUserPassword: action,
             onCompletedForm: action,
@@ -55,10 +55,9 @@ class UserStore {
 
     }
 
-    // onSignDefault = () => {
-    //     console.log('hi');
-    //     userStore.signIn = true;
-    // }
+    onSignDefault = () => {
+        userStore.signIn = true;
+    }
 
     get signText() {
         return (userStore.signIn === true ? 'Sign In' : 'Sign Up')
@@ -106,21 +105,28 @@ class UserStore {
                 .catch(function (error) {
                     console.log(error);
                 });
-            userStore.userPassword = '';
-            userStore.userLogin = '';
         }
         else {
-            axios({
+             axios({
                 method: "post",
                 url: "http://localhost:3000/users",
                 data: {
                     login: userStore.userLogin,
                     password: userStore.userPassword,
                 },
-            });
-            userStore.userPassword = '';
-            userStore.userLogin = '';
+            })
+            .then(function (response) {
+                runInAction(() => {
+                    userStore.token = response.data.token;
+                    userStore.authorized = true;
+                })
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
         }
+         userStore.userPassword = '';
+            userStore.userLogin = '';
     }
 
     onFocusLogin() {
