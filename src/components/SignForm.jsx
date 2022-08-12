@@ -29,6 +29,7 @@ navigate('/')
           )}
           <input
             className="user-login"
+            autoFocus
             value={userStore.userLogin}
             onChange={(e) => userStore.putUserLogin(e)}
             onBlur={userStore.onFocusLogin}

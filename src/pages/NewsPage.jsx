@@ -14,12 +14,12 @@ const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   useEffect(() => {
     if (cookies["token"]) {
-      store.getArticles("http://localhost:3000/all", cookies["token"]);
-      store.getAllArticles('http://localhost:3000/all', cookies["token"]);
+      store.getArticles(`http://localhost:3000/all/page/${store.page}`, cookies["token"]);
+      store.getAllArticles(`http://localhost:3000/all/length`, cookies["token"]);
       userStore.findUser(cookies["token"]);
     } else {
-      store.getArticles("http://localhost:3000/tasks");
-      store.getAllArticles("http://localhost:3000/tasks");
+      store.getArticles(`http://localhost:3000/tasks/page/${store.page}`);
+      store.getAllArticles(`http://localhost:3000/tasks/length`);
     }
   }, [store.articlesLength, store.pages, store.page, cookies["token"]]);
 
@@ -39,7 +39,7 @@ const NewsPage = () => {
   const logOut = () => {
     removeCookie("token");
   };
-  const text = store.lastArticleId;
+  // const text = store.lastArticleId;
   return (
     <div className="news-page">
       <h1>Список новостей</h1>

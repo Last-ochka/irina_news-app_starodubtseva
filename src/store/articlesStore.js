@@ -31,7 +31,7 @@ class Store {
             allArticles: observable,
             // urlForArticles: observable,
             pages: computed,
-            lastArticleId: computed,
+            // lastArticleId: computed,
             articlesLength: computed,
             getArticles: action,
             startLoading: action,
@@ -61,7 +61,6 @@ class Store {
             .then(function (response) {
                 runInAction(() => {
                     store.articles = response.data;
-                    console.log(response.data.slice(store.page*4-4, store.page*4))
                     store.loading = false;
                 });
             })
@@ -104,7 +103,7 @@ class Store {
     get pages() {
         return Math.ceil(this.articlesLength / 6);
     }
-    get lastArticleId() {
+    // get lastArticleId() {
         return (
             (this.allArticles?.[this.articlesLength - 1]?.id) ?
 
