@@ -3,6 +3,7 @@ import React from "react";
 import "./Card.css";
 import store from "../store/articlesStore";
 import { PropTypes } from "prop-types";
+import userStore from "../store/userStore";
 
 const Card = (props) => {
   const { article, data, logged } = props;
@@ -45,6 +46,7 @@ const Card = (props) => {
         View-more
       </button>
       <small>{data}</small>
+      <p className="article_text">{userStore.curretnUser.login} </p>
     </li>
   );
 };

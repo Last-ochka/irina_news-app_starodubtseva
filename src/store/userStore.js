@@ -40,6 +40,7 @@ class UserStore {
             getToken: action,
             onLogOut: action,
             findUser: action,
+            removeToken: action,
 
         })
     }
@@ -87,34 +88,16 @@ class UserStore {
     }
 
     onCompletedForm() {
-        if (userStore.signIn) {
-            axios({
-                method: "post",
-                url: "http://localhost:3000/auth/login",
-                data: {
-                    login: userStore.userLogin,
-                    password: userStore.userPassword,
-                },
-            })
-                .then(function (response) {
-                    runInAction(() => {
-                        userStore.token = response.data.token;
-                        userStore.authorized = true;
-                    })
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-        else {
-             axios({
-                method: "post",
-                url: "http://localhost:3000/users",
-                data: {
-                    login: userStore.userLogin,
-                    password: userStore.userPassword,
-                },
-            })
+        let a;
+        if (userStore.signIn) { a = "http://localhost:3000/auth/login" } else { a = "http://localhost:3000/users" }
+        axios({
+            method: "post",
+            url: a,
+            data: {
+                login: userStore.userLogin,
+                password: userStore.userPassword,
+            },
+        })
             .then(function (response) {
                 runInAction(() => {
                     userStore.token = response.data.token;
@@ -123,10 +106,11 @@ class UserStore {
             })
             .catch(function (error) {
                 console.log(error);
-            })
-        }
-         userStore.userPassword = '';
-            userStore.userLogin = '';
+                // alert(error.message);
+            });
+        userStore.userPassword = '';
+        userStore.userLogin = '';
+        userStore.token = '';
     }
 
     onFocusLogin() {
@@ -180,6 +164,10 @@ class UserStore {
             .catch(function (error) {
                 console.log(error);
             })
+    }
+
+    removeToken() {
+        userStore.token = '';
     }
 
 }

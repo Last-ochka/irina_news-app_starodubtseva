@@ -12,17 +12,11 @@ const SignForm = () => {
 
 const onClickSubmit = () => {
  userStore.onCompletedForm ()
-  if (userStore.authorized) {
-navigate('/')
-  };
- 
 }
 
-// useEffect(() => {
-//   if (userStore.authorized) {
-//     navigate('/')
-//       };
-// }, [!userStore.authorized]);
+useEffect(() => {
+  if (userStore.token) navigate('/');
+}, [userStore.token]);
 
   return (
     <div className="modal-window">

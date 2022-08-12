@@ -1,6 +1,7 @@
 import React from "react";
 import store from "../store/articlesStore";
 import "./ModalWindow.css";
+import userStore from "../store/userStore";
 
 const ModalWindow = () => {
   return (
@@ -19,6 +20,7 @@ const ModalWindow = () => {
         <small>
           {new Date(store.shownArticle.created_at).toLocaleDateString()}
         </small>
+        <p className="article_text">{userStore.curretnUser.login} </p>
       </div>
     </div>
   );

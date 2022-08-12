@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import NewsPage from './pages/NewsPage';
-import Test from './components/Test'
 import {BrowserRouter, Route, Routes}  from "react-router-dom"; 
 import SignInPage from './pages/SignInPage';
 
@@ -17,11 +16,6 @@ function App() {
     </Routes>
 </BrowserRouter>
 
-    <div className='App'>
- <Test />
-      {/* <NewsPage /> */}
-    
-    </div>
   </>);
 }
 

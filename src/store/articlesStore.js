@@ -13,9 +13,7 @@ class Store {
     page = 1;
     editableArticle = {};
     editModal = false;
-    // allArticles = [];
     articlesLength = 0;
-    // urlForArticles = true;
     lengthIsChange = false;
 
     constructor() {
@@ -31,10 +29,7 @@ class Store {
             editableArticle: observable,
             editModal: observable,
             lengthIsChange: observable,
-            // allArticles: observable,
-            // urlForArticles: observable,
             pages: computed,
-            // lastArticleId: computed,
             articlesLength: observable,
             getArticles: action,
             startLoading: action,
@@ -102,25 +97,9 @@ class Store {
                 })
             })
     }
-
-    // get articlesLength() {
-    //     return (
-    //         store.allArticles.length
-    //     )
-    // }
-
     get pages() {
         return Math.ceil(this.articlesLength / 6);
     }
-    // get lastArticleId() { ////////////////////////////////////////////////////////////// delete or change allArticles = length
-    //     return (
-    //         (this.allArticles?.[this.articlesLength - 1]?.id) ?
-
-    //             this.allArticles[this.articlesLength - 1].id : -1
-    //     )
-    //     // (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
-    //     // чтоб не забыть эквивалент 
-    // }
     setPage(curretPage) {
         runInAction(() => {
             (store.articles.length > 0) ?
@@ -196,7 +175,7 @@ class Store {
         store.newArticleText = '';
     };
 
-    onEditSubmit = () => {
+    onEditSubmit = (token) => {
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
@@ -220,23 +199,20 @@ class Store {
             //         })
             //     })
 
-
-            // console.log("start")
-            // axios.delete('http://localhost:3000/tasks/13')
             axios({
                 method: "put",
-                url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + store.editableArticle.id),
+                url: ("http://localhost:3000/tasks/" + store.editableArticle.id),
                 data: {
-                    createdAt: Date.now(),
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                    id: store.editableArticle.id,
+                },
+                headers: {
+                    Authorization: token,
                 },
             })
                 .then(() => {
                     runInAction(() => {
-                        store.getAllArticles();
-                        store.getArticles();
+                        store.lengthIsChange = !store.lengthIsChange;
                         store.closeModalForm();
                         store.newArticleTitle = '';
                         store.newArticleText = '';

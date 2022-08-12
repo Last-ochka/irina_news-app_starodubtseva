@@ -38,8 +38,9 @@ const NewsPage = () => {
 
   const logOut = () => {
     removeCookie("token");
+    userStore.removeToken();
   };
-  // const text = store.lastArticleId;
+
   return (
     <div className="news-page">
       <h1>Список новостей</h1>
@@ -88,7 +89,7 @@ const NewsPage = () => {
       )}
       {store.showModal ? <ModalWindow /> : <></>}
       {store.editModal ? (
-        <ModalForm onClickModal={() => store.onEditSubmit()} />
+        <ModalForm onClickModal={() => store.onEditSubmit(cookies['token'])} />
       ) : (
         <></>
       )}
