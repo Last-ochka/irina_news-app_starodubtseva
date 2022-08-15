@@ -16,7 +16,7 @@ const ModalWindow = () => {
         >
           close
         </button>
-        <p className="shownArticleText" >{store.shownArticle.text}</p>
+        <p className="shownArticleText">{store.shownArticle.text}</p>
         <div>
           <small>author:</small>
           <p className="author">

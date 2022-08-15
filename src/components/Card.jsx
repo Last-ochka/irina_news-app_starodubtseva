@@ -46,7 +46,12 @@ const Card = (props) => {
         View-more
       </button>
       <small>{data}</small>
-     <small>author:</small> <p className="author" >{article.user_id ? userStore.curretnUser.login : 'unknown'} </p>
+      <small>author: </small>{" "}
+      <p className="author">
+        {article.user_id == userStore.curretnUser.id
+          ? userStore.curretnUser.login
+          : "Unknown"}{" "}
+      </p>
     </li>
   );
 };

@@ -12,7 +12,7 @@ import { useCookies } from "react-cookie";
 
 const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-  useEffect(() => {
+  const loadingArticles = () => {
     if (cookies["token"]) {
       store.getArticles(
         `http://localhost:3000/${store.myOrAll}/page/${store.page}`,
@@ -27,8 +27,12 @@ const NewsPage = () => {
       store.getArticles(`http://localhost:3000/tasks/page/${store.page}`);
       store.getAllArticles(`http://localhost:3000/tasks/length`);
     }
+  };
+
+  useEffect(() => {
+    loadingArticles();
   }, [
-    store.articlesLength,
+    cookies,
     store.pages,
     store.lengthIsChange,
     store.page,
@@ -57,23 +61,31 @@ const NewsPage = () => {
   return (
     <div className="news-page">
       <div className="header-container">
-      <h1>News list</h1>
-      {store.loading ? (
-        <h2>Wait...</h2>
-      ) : (
-        <h2>Amount of {store.myOrAll} news: {store.articlesLength}</h2>
-      )}
+        <h1>News list</h1>
+        {store.loading ? (
+          <h2>Wait...</h2>
+        ) : (
+          <h2>
+            Amount of {store.myOrAll} news: {store.articlesLength}
+          </h2>
+        )}
       </div>
       <div className="nav-container">
         {cookies["token"] ? (
-          <button onClick={store.changeShownArticlesToAll} className="allArticles">
+          <button
+            onClick={store.changeShownArticlesToAll}
+            className="allArticles"
+          >
             All articles
           </button>
         ) : (
           <></>
         )}
         {cookies["token"] ? (
-          <button onClick={store.changeShownArticlesToMy} className="myArticles">
+          <button
+            onClick={store.changeShownArticlesToMy}
+            className="myArticles"
+          >
             My articles
           </button>
         ) : (
@@ -83,15 +95,18 @@ const NewsPage = () => {
         {cookies["token"] ? (
           <>
             <p className="loggedAs">
-       
-              Logged in as {userStore.curretnUser.login}
+              Logged in as <b>{userStore.curretnUser.login}</b>
             </p>
             <Link className="onLogOut" onClick={userStore.onLogOut} to="/">
               Log out
             </Link>
           </>
         ) : (
-          <Link className="signIn" onClick={userStore.onSignDefault} to="signin">
+          <Link
+            className="signIn"
+            onClick={userStore.onSignDefault}
+            to="signin"
+          >
             Sign In
           </Link>
         )}
@@ -127,7 +142,11 @@ const NewsPage = () => {
         <></>
       )}
       {store.newArticle ? (
-        <ModalForm onClickModal={() => store.onNewSubmit(cookies["token"])} />
+        <ModalForm
+          onClickModal={() =>
+            store.onNewSubmit(cookies["token"], store.postAnonymously)
+          }
+        />
       ) : (
         <></>
       )}

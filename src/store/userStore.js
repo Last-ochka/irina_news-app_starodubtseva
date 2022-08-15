@@ -1,5 +1,6 @@
 import { observable, action, makeObservable, runInAction, computed } from "mobx";
 import axios, * as others from 'axios';
+import store from "./articlesStore";
 
 
 class UserStore {
@@ -13,6 +14,8 @@ class UserStore {
     token = '';
     authorized = true;
     curretnUser = {};
+    authenticationMessage = '';
+    colorForMessage = '';
 
     constructor() {
         makeObservable(this, {
@@ -26,6 +29,8 @@ class UserStore {
             token: observable,
             curretnUser: observable,
             authorized: observable,
+            authenticationMessage: observable,
+            colorForMessage: observable,
             signText: computed,
             signLink: computed,
             buttonDisabled: computed,
@@ -58,6 +63,8 @@ class UserStore {
 
     onSignDefault = () => {
         userStore.signIn = true;
+        userStore.authenticationMessage = '';
+        userStore.colorForMessage = ''; // prozprachn
     }
 
     get signText() {
@@ -102,11 +109,17 @@ class UserStore {
                 runInAction(() => {
                     userStore.token = response.data.token;
                     userStore.authorized = true;
+                    userStore.authenticationMessage = 'Success';
+                    userStore.colorForMessage = '#07f72f75'
                 })
             })
             .catch(function (error) {
+                runInAction(() => {
+                    userStore.authenticationMessage = 'Error';
+                    userStore.colorForMessage = "#f7070785";
+                })
                 console.log(error);
-                // alert(error.message);
+                console.log(userStore.colorForMessage);
             });
         userStore.userPassword = '';
         userStore.userLogin = '';

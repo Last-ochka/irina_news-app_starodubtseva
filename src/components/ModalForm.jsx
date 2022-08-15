@@ -31,6 +31,14 @@ const ModalForm = (props) => {
             placeholder="Text"
             defaultValue={store.newArticleText}
           ></textarea>
+          <div>
+            <input
+              type="checkbox"
+              value={store.postAnonymously}
+              onChange={store.changeAuthor}
+            />{" "}
+            <label>Post anonymously</label>
+          </div>
           <input
             className="form-button"
             type="button"

@@ -4,17 +4,11 @@ import SignForm from "../components/SignForm";
 import { cookies } from "react-cookie";
 
 const SignInPage = () => {
-
-return  (
-
-<div>
-
-<SignForm 
-/> 
-</div>
-
-)
-
-}
+  return (
+    <div>
+      <SignForm />
+    </div>
+  );
+};
 
 export default SignInPage;

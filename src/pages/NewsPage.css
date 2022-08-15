@@ -3,7 +3,7 @@ h1 {
   margin-top: 25px;
   margin-bottom: 45px;
 }
-.createArticle{
+.createArticle {
   position: absolute;
   width: 100px;
   height: 30px;
@@ -13,19 +13,19 @@ h1 {
 
 .news-page a {
   display: block;
-    border: 1px;
-    border-style: groove;
-    /* border-color: black; */
-    width: 74px;
-    margin-left: 91%;
-    text-decoration: none;
-    color: black;
-    margin-top: -25px;
-    background-color: rgb(214 247 242 / 71%);
-    border-radius: 17px;
-    border-width: 1px;
-    border-color: #258f6f;
-    text-align: center;
+  border: 1px;
+  border-style: groove;
+  /* border-color: black; */
+  width: 74px;
+  margin-left: 91%;
+  text-decoration: none;
+  color: black;
+  margin-top: -25px;
+  background-color: rgb(214 247 242 / 71%);
+  border-radius: 17px;
+  border-width: 1px;
+  border-color: #258f6f;
+  text-align: center;
 }
 
 .allArticles {
@@ -38,7 +38,7 @@ h1 {
   width: 100px;
   height: 30px;
   left: 120px;
-  margin-left: 3px; 
+  margin-left: 3px;
   margin-right: 49%;
 }
 

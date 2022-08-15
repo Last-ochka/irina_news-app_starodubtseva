@@ -5,25 +5,44 @@ import userStore from "../store/userStore";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import store from "../store/articlesStore";
 
 const SignForm = () => {
-
   const navigate = useNavigate();
 
-const onClickSubmit = () => {
- userStore.onCompletedForm ()
-}
+  const onClickSubmit = () => {
+    userStore.onCompletedForm();
+  };
 
-useEffect(() => {
-  if (userStore.token) navigate('/');
-}, [userStore.token]);
+  const hi = () => {
+    return <h1>hi</h1>;
+  };
 
+  useEffect(
+    () => {
+      setTimeout(() => {
+        if (userStore.token) navigate("/");
+        hi();
+      }, 500);
+    },
+    [userStore.token],
+    userStore.authenticationMessage,
+    userStore.colorForMessage
+  );
   return (
     <div className="modal-window">
       <div className=" openArticle__sign-container">
         <form className="sign-form">
+          {userStore.authenticationMessage && (
+            <div
+              className="error-message_container"
+              style={{ backgroundColor: userStore.colorForMessage }}
+            >
+              <p className="error-message">{userStore.authenticationMessage}</p>
+            </div>
+          )}
           <h3>{userStore.signText}</h3>
-          {(!userStore.invalidLogin && userStore.focusLogin) ? (
+          {!userStore.invalidLogin && userStore.focusLogin ? (
             <small className="wrong-login">Invalid username</small>
           ) : (
             <></>
@@ -36,9 +55,9 @@ useEffect(() => {
             onBlur={userStore.onFocusLogin}
             onFocus={userStore.onFocusLogin}
             placeholder="login"
-            type="text"         
+            type="text"
           />
-          {(!userStore.invalidPassword && userStore.focusPassword) ? (
+          {!userStore.invalidPassword && userStore.focusPassword ? (
             <small className="wrong-password">Invalid password</small>
           ) : (
             <></>
@@ -53,7 +72,7 @@ useEffect(() => {
             type="password"
           />
           <button
-          type="button"
+            type="button"
             disabled={userStore.buttonDisabled}
             onClick={onClickSubmit}
             className="sign-in"
@@ -67,7 +86,9 @@ useEffect(() => {
           >
             {userStore.signLink}
           </button>
-          <Link onClick={userStore.refreshForm} to="/">Back</Link>
+          <Link onClick={userStore.refreshForm} to="/">
+            Back
+          </Link>
         </form>
       </div>
     </div>

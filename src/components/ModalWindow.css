@@ -7,17 +7,16 @@
   bottom: 0px;
 }
 .openArticle {
-  margin:  auto;
+  margin: auto;
   background-color: rgb(255, 255, 255);
   width: 900px;
   height: 450px;
   margin-top: 150px;
   padding: 20px;
   justify-items: center;
-  display: grid;    
+  display: grid;
   grid-template-columns: 1fr 1fr;
-  box-sizing: border-box;
-
+  /* box-sizing: border-box; */
 }
 .close-article {
   width: 65px;

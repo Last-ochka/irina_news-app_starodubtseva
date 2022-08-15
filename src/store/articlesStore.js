@@ -16,7 +16,8 @@ class Store {
     articlesLength = 0;
     lengthIsChange = false;
     showAllArticles = true;
-    
+    postAnonymously = false;
+
 
     constructor() {
         makeObservable(this, {
@@ -33,7 +34,8 @@ class Store {
             lengthIsChange: observable,
             showAllArticles: observable,
             articlesLength: observable,
-            myOrAll: computed, 
+            postAnonymously: observable,
+            myOrAll: computed,
             pages: computed,
             getArticles: action,
             startLoading: action,
@@ -50,6 +52,7 @@ class Store {
             editArticle: action,
             changeShownArticlesToAll: action,
             changeShownArticlesToMy: action,
+            changeAuthor: action,
         })
     }
 
@@ -143,7 +146,8 @@ class Store {
         store.editModal = !store.editModal;
     };
 
-    onNewSubmit = (token) => {
+    onNewSubmit = (token, anon) => {
+        let url = anon ? "http://localhost:3000/new" : "http://localhost:3000/tasks";
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
@@ -152,7 +156,7 @@ class Store {
         else
             axios({
                 method: "post",
-                url: "http://localhost:3000/tasks",
+                url: url,
                 headers: {
                     Authorization: token,
                 },
@@ -208,20 +212,24 @@ class Store {
                 })
         }
     }
-    changeShownArticlesToAll () {
+    changeShownArticlesToAll() {
         store.showAllArticles = true;
         store.page = 1;
     }
-    changeShownArticlesToMy () {
+    changeShownArticlesToMy() {
         store.showAllArticles = false;
         store.page = 1;
     }
-    get myOrAll (){
+    get myOrAll() {
         if (store.showAllArticles) {
             return 'all'
         } else {
             return 'my'
         }
+    }
+
+    changeAuthor() {
+        store.postAnonymously = !store.postAnonymously;
     }
 }
 const store = new Store();

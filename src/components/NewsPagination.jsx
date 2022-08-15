@@ -14,24 +14,21 @@ const NewsPagination = () => {
 
   return (
     <div className="pagination">
-    <ul className="pagination-buttons">
-      {pages.map((page) => {
-        return (
-          <button
-            onClick={() => {
-              store.setPage(page);
-            }}
-            key={Math.random()}
-          >
-            {page}
-          </button>
-        );
-      })}
-    </ul>  
-     {(store.articles.length < 1) ? (
-       ""
-      ) : (
-    <h4>Page: {store.page}</h4>)}
+      <ul className="pagination-buttons">
+        {pages.map((page) => {
+          return (
+            <button
+              onClick={() => {
+                store.setPage(page);
+              }}
+              key={Math.random()}
+            >
+              {page}
+            </button>
+          );
+        })}
+      </ul>
+      {store.articles.length < 1 ? "" : <h4>Page: {store.page}</h4>}
     </div>
   );
 };

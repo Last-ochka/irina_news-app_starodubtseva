@@ -1,32 +1,34 @@
 .sign-form {
   position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    margin: auto;
-    text-align: center;
-    row-gap: 25px;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: auto;
+  text-align: center;
+  row-gap: 25px;
 }
 /* .sign-container {
 
 } */
 
 .openArticle__sign-container {
-    width: 500px;
-    height: 400px;
-    background-color: rgb(255, 255, 255);
-    padding: 20px;
-    justify-items: center;
-    margin:  auto;
-    margin-top: 150px;
+  width: 500px;
+  height: 400px;
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  justify-items: center;
+  margin: auto;
+  margin-top: 150px;
 }
 .sign-form h3 {
   text-align: center;
 }
-.user-login, .user-password {
+.user-login,
+.user-password {
   height: 25px;
 }
-.wrong-login, .wrong-password {
+.wrong-login,
+.wrong-password {
   position: absolute;
   color: rgb(255, 0, 0);
 }
@@ -36,7 +38,19 @@
 .wrong-password {
   bottom: 186px;
 }
-.sign-in , .change-for-create{
+.sign-in,
+.change-for-create {
   width: 170px;
   margin: auto;
+}
+
+.error-message_container {
+  position: absolute;
+  width: 137px;
+  left: 102px;
+  height: 19px;
+  bottom: 254px;
+}
+p.error-message {
+  margin: 0;
 }
