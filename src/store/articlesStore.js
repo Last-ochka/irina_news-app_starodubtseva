@@ -13,7 +13,11 @@ class Store {
     page = 1;
     editableArticle = {};
     editModal = false;
-    allArticles = [];
+    articlesLength = 0;
+    lengthIsChange = false;
+    showAllArticles = true;
+    postAnonymously = false;
+
 
     constructor() {
         makeObservable(this, {
@@ -27,10 +31,12 @@ class Store {
             page: observable,
             editableArticle: observable,
             editModal: observable,
-            allArticles: observable,
+            lengthIsChange: observable,
+            showAllArticles: observable,
+            articlesLength: observable,
+            postAnonymously: observable,
+            myOrAll: computed,
             pages: computed,
-            lastArticleId: computed,
-            articlesLength: computed,
             getArticles: action,
             startLoading: action,
             getAllArticles: action,
@@ -44,66 +50,70 @@ class Store {
             closeModalForm: action,
             editArticleModalForm: action,
             editArticle: action,
+            changeShownArticlesToAll: action,
+            changeShownArticlesToMy: action,
+            changeAuthor: action,
         })
     }
 
-    getArticles = () => {
+    getArticles = (url, token) => {
         store.loading = true;
-        axios
-            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news?page=${store.page}&limit=6`)
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: token,
+            },
+        })
             .then(function (response) {
                 runInAction(() => {
-                    store.articles = response.data.items;
+                    store.articles = response.data;
                     store.loading = false;
-                })
+                });
             })
             .catch(function (error) {
                 console.log(error);
-            })
+            });
     }
-    getAllArticles = () =>
-        axios
-            .get(`https://62061fb7161670001741bf36.mockapi.io/api/news`)
+    getAllArticles = (url, token) =>
+        axios({
+            method: "get",
+            url: url,
+            headers: {
+                Authorization: token,
+            },
+        })
             .then(function (response) {
                 runInAction(() => {
-                    store.allArticles = response.data.items;
+                    store.articlesLength = response.data;
                 })
             })
             .catch(function (error) {
                 console.log(error);
             })
-    deleteArticle = (id) => {
-        axios.delete('https://62061fb7161670001741bf36.mockapi.io/api/news/' + id)
+
+    deleteArticle = (id, token) => {
+        axios({
+            method: "delete",
+            url: (`http://localhost:3000/tasks/` + id),
+            headers: {
+                Authorization: token,
+            },
+        })
             .then(() => {
                 runInAction(() => {
-                    store.getAllArticles();
+                    store.lengthIsChange = !store.lengthIsChange;
                 })
             })
     }
-    
-    get articlesLength(){
-        return (
-            store.allArticles.length 
-        )
-    }
-
     get pages() {
         return Math.ceil(this.articlesLength / 6);
-    }
-    get lastArticleId() {
-        return (
-            (this.allArticles?.[this.articlesLength - 1]?.id) ?
-
-                this.allArticles[this.articlesLength - 1].id : -1
-        )
-        // (((this.articlesLength === 0) || (this.allArticles === [])) ? [{ id: -1 }] : this.allArticles[this.articlesLength - 1])).id
-        // чтоб не забыть эквивалент 
     }
     setPage(curretPage) {
         runInAction(() => {
             (store.articles.length > 0) ?
                 (store.page = curretPage) :
-                (store.page =  1)
+                (store.page = 1)
         })
     }
 
@@ -117,7 +127,6 @@ class Store {
     }
 
     viewArticle = (id) => {
-        console.log(id);
         store.showModal = !store.showModal;
     };
 
@@ -134,11 +143,11 @@ class Store {
     };
 
     editArticleModalForm = (id) => {
-        console.log(id);
         store.editModal = !store.editModal;
     };
 
-    onNewSubmit = () => {
+    onNewSubmit = (token, anon) => {
+        let url = anon ? "http://localhost:3000/new" : "http://localhost:3000/tasks";
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
@@ -147,16 +156,20 @@ class Store {
         else
             axios({
                 method: "post",
-                url: "https://62061fb7161670001741bf36.mockapi.io/api/news",
+                url: url,
+                headers: {
+                    Authorization: token,
+                },
                 data: {
-                    createdAt: Date.now(),
+
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                    id: store.lastArticleId + 1,
+
                 },
             })
                 .then(() => runInAction(() => {
-                    store.getAllArticles();
+                    store.lengthIsChange = !store.lengthIsChange;
+
                     store.closeModalForm();
                     store.newArticleTitle = '';
                     store.newArticleText = '';
@@ -172,49 +185,51 @@ class Store {
         store.newArticleText = '';
     };
 
-    onEditSubmit = (idArticle) => {
+    onEditSubmit = (token) => {
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
             alert("Text cannot be empty!")
-        }
-        else
-            // axios({
-            //     method: "PATCH",
-            //     url: ("https://62061fb7161670001741bf36.mockapi.io/api/news" + id),
-            //     data: {
-            //         createdAt: Date.now(),
-            //         title: store.newArticleTitle,
-            //         text: store.newArticleText,
-            //     },
-            // })
-            //     .then(() => {
-            //         runInAction(() => {
-            //             store.getAllArticles();
-            //             store.closeModalForm();
-            //             store.newArticleTitle = '';
-            //             store.newArticleText = '';
-            //         })
-            //     })
+        } else {
             axios({
                 method: "put",
-                url: ("https://62061fb7161670001741bf36.mockapi.io/api/news/" + idArticle),
+                url: ("http://localhost:3000/tasks/" + store.editableArticle.id),
                 data: {
-                    createdAt: Date.now(),
                     title: store.newArticleTitle,
                     text: store.newArticleText,
-                    id: idArticle,
+                },
+                headers: {
+                    Authorization: token,
                 },
             })
                 .then(() => {
                     runInAction(() => {
-                        store.getAllArticles();
-                        store.getArticles();
+                        store.lengthIsChange = !store.lengthIsChange;
                         store.closeModalForm();
                         store.newArticleTitle = '';
                         store.newArticleText = '';
                     })
                 })
+        }
+    }
+    changeShownArticlesToAll() {
+        store.showAllArticles = true;
+        store.page = 1;
+    }
+    changeShownArticlesToMy() {
+        store.showAllArticles = false;
+        store.page = 1;
+    }
+    get myOrAll() {
+        if (store.showAllArticles) {
+            return 'all'
+        } else {
+            return 'my'
+        }
+    }
+
+    changeAuthor() {
+        store.postAnonymously = !store.postAnonymously;
     }
 }
 const store = new Store();

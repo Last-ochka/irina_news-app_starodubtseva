@@ -1,4 +1,4 @@
-.newsArticle{
+.newsArticle {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -6,6 +6,11 @@
   margin: 0 auto;
   justify-content: center;
   padding: 0px;
+  background-color: rgb(231 255 231 / 63%);
+  border: 2px;
+  border-style: groove;
+  border-color: #258f6f;
+  margin-top: 50px;
 }
 li {
   width: 29%;
@@ -20,12 +25,14 @@ li {
   grid-template-rows: 1fr 1fr 1fr;
   box-sizing: border-box;
   padding: 5px;
+  background-color: #fffffb;
+  min-width: 223px;
 }
 h2 {
   text-align: center;
 }
 .article_text {
-  grid-column-start: 1 ;
+  grid-column-start: 1;
   grid-column-end: 3;
 }
 .view-more {
@@ -33,9 +40,12 @@ h2 {
   height: 30px;
   margin: auto;
 }
-small {
+.article small {
   margin: auto;
 }
 .buttons_edit-button {
   margin-right: 5px;
+}
+.author {
+  text-align: left;
 }

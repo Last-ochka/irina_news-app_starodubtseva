@@ -3,29 +3,38 @@ import React from "react";
 import "./Card.css";
 import store from "../store/articlesStore";
 import { PropTypes } from "prop-types";
+import userStore from "../store/userStore";
 
 const Card = (props) => {
-  const { article, data } = props;
+  const { article, data, logged } = props;
   return (
-    <li key={Math.random()} className="Article">
-      <h5>{article.title}</h5>
+    <li key={Math.random()} className="article">
+      <h4>{article.title}</h4>
       <div className="buttons">
-        <button
-          onClick={() => {
-            store.editArticle(article);
-          }}
-          className="buttons_edit-button"
-        >
-          Edit
-        </button>
-        <button
-          onClick={() => {
-            store.deleteArticle(article.id);
-          }}
-          className="buttons_delete-button"
-        >
-          Delete
-        </button>
+        {logged ? (
+          <button
+            onClick={() => {
+              store.editArticle(article);
+            }}
+            className="buttons_edit-button"
+          >
+            Edit
+          </button>
+        ) : (
+          <></>
+        )}
+        {logged ? (
+          <button
+            onClick={() => {
+              store.deleteArticle(article.id, logged);
+            }}
+            className="buttons_delete-button"
+          >
+            Delete
+          </button>
+        ) : (
+          <></>
+        )}
       </div>
       <p className="article_text">{article.text.slice(0, 100)} </p>
       <button
@@ -37,6 +46,12 @@ const Card = (props) => {
         View-more
       </button>
       <small>{data}</small>
+      <small>author: </small>
+      <p className="author">
+        {article.user_id == userStore.curretnUser.id
+          ? (userStore.curretnUser.login||"Unknown")
+          : "Unknown"}
+      </p>
     </li>
   );
 };
@@ -46,7 +61,7 @@ Card.propTypes = {
     createdAt: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     title: PropTypes.string,
     text: PropTypes.string,
-    id: PropTypes.string,
+    id: PropTypes.number,
   }),
   data: PropTypes.string,
 };
