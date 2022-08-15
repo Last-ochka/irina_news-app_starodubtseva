@@ -13,19 +13,16 @@ import { useCookies } from "react-cookie";
 const NewsPage = () => {
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
   const loadingArticles = () => {
+    store.getArticles(
+      `http://localhost:3000/${store.myOrAll}/page/${store.page}`,
+      cookies["token"]
+    );
+    store.getAllArticles(
+      `http://localhost:3000/${store.myOrAll}/length`,
+      cookies["token"]
+    );
     if (cookies["token"]) {
-      store.getArticles(
-        `http://localhost:3000/${store.myOrAll}/page/${store.page}`,
-        cookies["token"]
-      ); // all -> store.myOrAll
-      store.getAllArticles(
-        `http://localhost:3000/${store.myOrAll}/length`,
-        cookies["token"]
-      );
       userStore.findUser(cookies["token"]);
-    } else {
-      store.getArticles(`http://localhost:3000/tasks/page/${store.page}`);
-      store.getAllArticles(`http://localhost:3000/tasks/length`);
     }
   };
 
@@ -71,26 +68,24 @@ const NewsPage = () => {
         )}
       </div>
       <div className="nav-container">
-        {cookies["token"] ? (
-          <button
-            onClick={store.changeShownArticlesToAll}
-            className="allArticles"
-          >
-            All articles
-          </button>
-        ) : (
-          <></>
-        )}
-        {cookies["token"] ? (
-          <button
-            onClick={store.changeShownArticlesToMy}
-            className="myArticles"
-          >
-            My articles
-          </button>
-        ) : (
-          <></>
-        )}
+        <button
+          onClick={store.changeShownArticlesToAll}
+          className="allArticles"
+        >
+          All articles
+        </button>
+
+        <></>
+
+        <button
+          onClick={store.changeShownArticlesToMy}
+          className="myArticles"
+          disabled={!cookies["token"]}
+        >
+          My articles
+        </button>
+
+        <></>
 
         {cookies["token"] ? (
           <>
@@ -111,7 +106,7 @@ const NewsPage = () => {
           </Link>
         )}
       </div>{" "}
-      {cookies["token"] ? (
+      {cookies["token"] && store.myOrAll == "my" ? (
         <button onClick={store.createArticle} className="createArticle">
           New Article
         </button>
@@ -142,11 +137,7 @@ const NewsPage = () => {
         <></>
       )}
       {store.newArticle ? (
-        <ModalForm
-          onClickModal={() =>
-            store.onNewSubmit(cookies["token"], store.postAnonymously)
-          }
-        />
+        <ModalForm onClickModal={() => store.onNewSubmit(cookies["token"])} />
       ) : (
         <></>
       )}

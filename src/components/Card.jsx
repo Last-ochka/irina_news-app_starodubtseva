@@ -11,7 +11,9 @@ const Card = (props) => {
     <li key={Math.random()} className="article">
       <h4>{article.title}</h4>
       <div className="buttons">
-        {logged ? (
+        {logged &&
+        userStore.curretnUser.id == article.user_id &&
+        store.myOrAll == "my" ? (
           <button
             onClick={() => {
               store.editArticle(article);
@@ -23,7 +25,9 @@ const Card = (props) => {
         ) : (
           <></>
         )}
-        {logged ? (
+        {logged &&
+        userStore.curretnUser.id == article.user_id &&
+        store.myOrAll == "my" ? (
           <button
             onClick={() => {
               store.deleteArticle(article.id, logged);
@@ -47,11 +51,7 @@ const Card = (props) => {
       </button>
       <small>{data}</small>
       <small>author: </small>
-      <p className="author">
-        {article.user_id == userStore.curretnUser.id
-          ? (userStore.curretnUser.login||"Unknown")
-          : "Unknown"}
-      </p>
+      <p className="author">{userStore.users[article.user_id] ?? ""}</p>
     </li>
   );
 };

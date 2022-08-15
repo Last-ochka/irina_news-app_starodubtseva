@@ -16,6 +16,7 @@ class UserStore {
     curretnUser = {};
     authenticationMessage = '';
     colorForMessage = '';
+    users = {};
 
     constructor() {
         makeObservable(this, {
@@ -31,6 +32,7 @@ class UserStore {
             authorized: observable,
             authenticationMessage: observable,
             colorForMessage: observable,
+            users: observable,
             signText: computed,
             signLink: computed,
             buttonDisabled: computed,
@@ -58,13 +60,15 @@ class UserStore {
         else userStore.invalidLogin = true;
         if (userStore.userPassword.length < 2) userStore.invalidPassword = false;
         else userStore.invalidPassword = true;
+        userStore.authenticationMessage = '';
+        userStore.colorForMessage = '';
 
     }
 
     onSignDefault = () => {
         userStore.signIn = true;
         userStore.authenticationMessage = '';
-        userStore.colorForMessage = ''; // prozprachn
+        userStore.colorForMessage = '';
     }
 
     get signText() {
@@ -172,6 +176,7 @@ class UserStore {
             .then(function (response) {
                 runInAction(() => {
                     userStore.curretnUser = response.data;
+                    userStore.users[response.data.id] = response.data.login;
                 })
             })
             .catch(function (error) {
