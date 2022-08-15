@@ -16,7 +16,6 @@ class Store {
     articlesLength = 0;
     lengthIsChange = false;
     showAllArticles = true;
-    postAnonymously = false;
 
 
     constructor() {
@@ -34,7 +33,6 @@ class Store {
             lengthIsChange: observable,
             showAllArticles: observable,
             articlesLength: observable,
-            postAnonymously: observable,
             myOrAll: computed,
             pages: computed,
             getArticles: action,
@@ -52,7 +50,6 @@ class Store {
             editArticle: action,
             changeShownArticlesToAll: action,
             changeShownArticlesToMy: action,
-            changeAuthor: action,
         })
     }
 
@@ -146,8 +143,7 @@ class Store {
         store.editModal = !store.editModal;
     };
 
-    onNewSubmit = (token, anon) => {
-        let url = anon ? "http://localhost:3000/new" : "http://localhost:3000/tasks";
+    onNewSubmit = (token) => {
         if (!store.newArticleTitle) {
             alert("Title cannot be empty!")
         } else if (!store.newArticleText) {
@@ -156,7 +152,7 @@ class Store {
         else
             axios({
                 method: "post",
-                url: url,
+                url: "http://localhost:3000/tasks",
                 headers: {
                     Authorization: token,
                 },

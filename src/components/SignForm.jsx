@@ -23,7 +23,7 @@ const SignForm = () => {
       setTimeout(() => {
         if (userStore.token) navigate("/");
         hi();
-      }, 500);
+      }, 300);
     },
     [userStore.token],
     userStore.authenticationMessage,
